@@ -61,8 +61,6 @@ float cov(float *x, float *y, int size) {
  * @param x
  * @param y
  * @param size
- * @return
- */
 float pearson(float *x, float *y, int size){
 
 }
