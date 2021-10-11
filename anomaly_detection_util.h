@@ -4,6 +4,10 @@
 
 #ifndef DEV_ANOMALY_DETECTION_UTIL_H
 #define DEV_ANOMALY_DETECTION_UTIL_H
+/**
+ * calculate life expectancy
+ */
+float expectancy(float *x, int size);
 
 // returns the variance of X and Y
 float var(float *x, int size);
