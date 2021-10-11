@@ -1,0 +1,8 @@
+//
+// Created by itay2 on 11/10/2021.
+//
+
+#ifndef DEV_ANOMALY_DETECTION_UTIL_H
+#define DEV_ANOMALY_DETECTION_UTIL_H
+
+#endif //DEV_ANOMALY_DETECTION_UTIL_H
