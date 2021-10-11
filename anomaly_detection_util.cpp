@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+
 
 /**
  * @author Roei Gehassi
@@ -55,12 +57,13 @@ float cov(float *x, float *y, int size) {
     //Return the covariance.
     return expectancy(ptr_xy, size) - expectancy(x, size) * expectancy(y, size);
 }
+
 /**
  * returns the Pearson correlation coefficient of X and Y
  * @param x
  * @param y
  * @param size
  */
-float pearson(float *x, float *y, int size){
-
+float pearson(float *x, float *y, int size) {
+    return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
 }

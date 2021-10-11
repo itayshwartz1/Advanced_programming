@@ -4,6 +4,8 @@
 
 #ifndef DEV_ANOMALY_DETECTION_UTIL_H
 #define DEV_ANOMALY_DETECTION_UTIL_H
+#include <cmath>
+
 /**
  * calculate life expectancy
  */
