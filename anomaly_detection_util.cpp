@@ -63,3 +63,7 @@ float cov(float *x, float *y, int size) {
 float pearson(float *x, float *y, int size) {
     return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
 }
+// performs a linear regression and return s the line equation
+Line linear_reg(Point **points, int size){
+
+}

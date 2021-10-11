@@ -4,6 +4,7 @@
 
 #ifndef DEV_ANOMALY_DETECTION_UTIL_H
 #define DEV_ANOMALY_DETECTION_UTIL_H
+
 #include <cmath>
 
 /**
@@ -38,6 +39,14 @@ public:
     float x, y;
 
     Point(float x, float y) : x(x), y(x) {}
+
+    float getX() {
+        return this->x;
+    }
+
+    float getY() {
+        return this->y;
+    }
 };
 
 // performs a linear regression and return s the line equation
