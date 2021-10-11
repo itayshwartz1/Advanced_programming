@@ -35,11 +35,6 @@ float var(float *x, int size) {
     return avg - expectancy(x, size);
 }
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
-}
-
 /**
  * @author Itay Shwartz
  * @date 11/10
