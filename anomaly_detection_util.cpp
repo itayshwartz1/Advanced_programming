@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include "anomaly_detection_util.h"
 
 
 /**
@@ -33,11 +34,6 @@ float var(float *x, int size) {
     }
     avg = sum / (float) size;
     return avg - expectancy(x, size);
-}
-
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
 }
 
 /**
