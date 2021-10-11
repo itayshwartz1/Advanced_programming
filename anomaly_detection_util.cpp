@@ -23,8 +23,9 @@ int main() {
 
 /**
  * @author Itay Shwartz
- * @date 18:06
-The cov function return the covariance of variables X and Y.
+ * @date 11/10
+ * The cov function return the covariance of variables X and Y. 𝑐𝑜𝑣(𝑋, 𝑌) = 𝐸((𝑋 − 𝐸(𝑋))(𝑌 − 𝐸(𝑌)).
+ * @return the covariance.
  **/
 float cov(float *x, float *y, int size) {
     //This loop creat a new array from x and y, means xy.
