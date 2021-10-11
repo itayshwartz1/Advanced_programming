@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 /**
  * @author Roei Gehassi
  * @date 11/10/21 18:39
@@ -42,7 +41,7 @@ int main() {
 /**
  * @author Itay Shwartz
  * @date 11/10
- * @param x, y, size.
+ * @param x, y, size
  * The cov function return the covariance of variables X and Y. 𝑐𝑜𝑣(𝑋, 𝑌) = 𝐸((𝑋 − 𝐸(𝑋))(𝑌 − 𝐸(𝑌)).
  * @return the covariance.
  **/
