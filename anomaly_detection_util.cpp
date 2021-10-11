@@ -83,3 +83,27 @@ Line linear_reg(Point **points, int size) {
     b = var(yArr, size) - a * var(xArr, size);
     return Line(a, b);
 }
+
+
+/**
+ * returns the deviation between point p and the line.
+ * @author Roei and Itay
+ * @date19:55 11/10/21
+ * @param p
+ * @param l
+ * @return
+ */
+float dev(Point p, Line l) {
+    return fabsf(p.getY() - l.f(p.getX()));
+}
+
+/**
+ * returns the deviation between point p and the line equation of the points
+ * @param p
+ * @param points
+ * @param size
+ * @return
+ */
+float dev(Point p, Point **points, int size) {
+    return dev(p, linear_reg(points, size));
+}
