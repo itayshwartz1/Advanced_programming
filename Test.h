@@ -5,12 +5,8 @@
 #ifndef DEV_TEST_H
 
 #include "anomaly_detection_util.h"
+#include <cstdio>
 
 #define DEV_TEST_H
-
-class Test {
-
-};
-
 
 #endif //DEV_TEST_H

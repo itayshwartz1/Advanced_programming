@@ -2,7 +2,10 @@
 
 
 /**
+ * @author Roei Gehassi
+ * @date 11/10/21 18:39
  * calculate life expectancy
+ * return expectancy
  */
 float expectancy(float *x, int size) {
     float sum = 0;
@@ -15,7 +18,13 @@ float expectancy(float *x, int size) {
     return (sum) / (float) size;
 }
 
-// returns the variance of X and Y
+/**
+ *  * @author Roei Gehassi
+ * @date 11/10/21 18:39
+ * @param x
+ * @param size
+ * @return the variance of X and Y
+ */
 float var(float *x, int size) {
     float sum = 0, avg;
     for (int i = 1; i < size; i++) {
@@ -45,4 +54,14 @@ float cov(float *x, float *y, int size) {
     float *ptr_xy = xy;
     //Return the covariance.
     return expectancy(ptr_xy, size) - expectancy(x, size) * expectancy(y, size);
+}
+/**
+ * returns the Pearson correlation coefficient of X and Y
+ * @param x
+ * @param y
+ * @param size
+ * @return
+ */
+float pearson(float *x, float *y, int size){
+
 }
