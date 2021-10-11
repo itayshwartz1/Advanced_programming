@@ -41,18 +41,19 @@ int main() {
 
 /**
  * @author Itay Shwartz
- * @date 18:06
-The cov function return the covariance of variables X and Y.
+ * @date 11/10
+ * The cov function return the covariance of variables X and Y. 𝑐𝑜𝑣(𝑋, 𝑌) = 𝐸((𝑋 − 𝐸(𝑋))(𝑌 − 𝐸(𝑌)).
+ * @return the covariance.
  **/
 float cov(float *x, float *y, int size) {
-    //This loop creat a new array from x and y, means xy.
+    //This loop creat a new array from x and y, means xy...
     float xy[size];
     for (int i = 0; i < size; i++) {
         xy[i] = x[i] * y[i];
     }
-    float * ptr_xy = xy;
+    float *ptr_xy = xy;
     //Return the covariance.
-    return expectancy(ptr_xy , size) - expectancy(x, size) * expectancy(y, size);
+    return expectancy(ptr_xy, size) - expectancy(x, size) * expectancy(y, size);
 }
 /**
  * returns the Pearson correlation coefficient of X and Y
