@@ -1,6 +1,6 @@
 #include <iostream>
 
-int anomaly_detection_util() {
+int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
