@@ -42,6 +42,7 @@ int main() {
 /**
  * @author Itay Shwartz
  * @date 11/10
+ * @param x, y, size.
  * The cov function return the covariance of variables X and Y. 𝑐𝑜𝑣(𝑋, 𝑌) = 𝐸((𝑋 − 𝐸(𝑋))(𝑌 − 𝐸(𝑌)).
  * @return the covariance.
  **/
@@ -60,8 +61,6 @@ float cov(float *x, float *y, int size) {
  * @param x
  * @param y
  * @param size
- * @return .dd
- */
 float pearson(float *x, float *y, int size){
 
 }
