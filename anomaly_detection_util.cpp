@@ -28,7 +28,7 @@ int main() {
  * @return the covariance.
  **/
 float cov(float *x, float *y, int size) {
-    //This loop creat a new array from x and y, means xy.....
+    //This loop creat a new array from x and y, means xy...
     float xy[size];
     for (int i = 0; i < size; i++) {
         xy[i] = x[i] * y[i];
