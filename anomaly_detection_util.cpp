@@ -63,7 +63,23 @@ float cov(float *x, float *y, int size) {
 float pearson(float *x, float *y, int size) {
     return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
 }
-// performs a linear regression and return s the line equation
-Line linear_reg(Point **points, int size){
 
+/**
+ *  performs a linear regression and return s the line equation
+ *  @author Roei Gehassi
+ *  @date 11/10/21 19:47
+ * @param points
+ * @param size
+ * @return
+ */
+Line linear_reg(Point **points, int size) {
+    float xArr[size], yArr[size];
+    for (int i = 0; i < size; i++) {
+        xArr[i] = points[i]->getX();
+        yArr[i] = points[i]->getY();
+    }
+    float a, b;
+    a = cov(xArr, yArr, size) / var(xArr, size);
+    b = var(yArr, size) - a * var(xArr, size);
+    return Line(a, b);
 }
