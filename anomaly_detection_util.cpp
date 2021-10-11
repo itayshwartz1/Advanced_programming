@@ -29,3 +29,19 @@ int main() {
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
+
+/**
+ * @author Itay Shwartz
+ * @date 18:06
+The cov function return the covariance of variables X and Y.
+ **/
+float cov(float *x, float *y, int size) {
+    //This loop creat a new array from x and y, means xy.
+    float xy[size];
+    for (int i = 0; i < size; i++) {
+        xy[i] = x[i] * y[i];
+    }
+    float * ptr_xy = xy;
+    //Return the covariance.
+    return expectancy(ptr_xy , size) - expectancy(x, size) * expectancy(y, size);
+}
