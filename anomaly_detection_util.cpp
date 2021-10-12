@@ -4,40 +4,41 @@
 
 
 /**
- * @author Roei Gehassi
  * @date 11/10/21 18:39
  * calculate life expectancy
  * return expectancy
  */
 float expectancy(float *x, int size) {
+    if(size <= 0) {
+        return 0;
+    }
+    // this loop sums the values of the array.
     float sum = 0;
-    /*
-     * this loop sums the values of the array.
-     */
     for (int i = 1; i <= size; i++) {
         sum += x[i];
     }
-    return (sum) / (float) size;
+    return (float)sum / (float) size;
 }
 
 /**
- *  * @author Roei Gehassi
  * @date 11/10/21 18:39
  * @param x
  * @param size
  * @return the variance of X and Y
  */
 float var(float *x, int size) {
-    float sum = 0, avg;
-    for (int i = 1; i < size; i++) {
+    if(size <= 0) {
+        return 0;
+    }
+    float sum = 0;
+    for (int i = 0; i < size; i++) {
         sum += (x[i] * x[i]);
     }
-    avg = sum / (float) size;
-    return avg - expectancy(x, size);
+    float avg = sum / (float) size;
+    return avg - expectancy(x, size); ///לא צריך להיות בריבוע?????????????????
 }
 
 /**
- * @author Itay Shwartz
  * @date 11/10
  * @param x, y, size
  * The cov function return the covariance of variables X and Y. 𝑐𝑜𝑣(𝑋, 𝑌) = 𝐸((𝑋 − 𝐸(𝑋))(𝑌 − 𝐸(𝑌)).
@@ -61,26 +62,34 @@ float cov(float *x, float *y, int size) {
  * @param size
  */
 float pearson(float *x, float *y, int size) {
+    if(size <= 0) {
+        return 0;
+    }
     return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
 }
 
 /**
- *  performs a linear regression and return s the line equation
- *  @author Roei Gehassi
- *  @date 11/10/21 19:47
- * @param points
- * @param size
- * @return
+ * performs a linear regression and return s the line equation
+ * @date 12/10/21 13:10
+ * @param points, size
+ * @return Line.
  */
 Line linear_reg(Point **points, int size) {
+    if(size <= 0) {
+        return // what we should return???
+    }
     float xArr[size], yArr[size];
     for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->getX();
         yArr[i] = points[i]->getY();
     }
-    float a, b;
-    a = cov(xArr, yArr, size) / var(xArr, size);
-    b = var(yArr, size) - a * var(xArr, size);
+    float covariance = cov(xArr, yArr, size);
+    float variance = var(xArr, size);
+    if((covariance || variance) == 0) {
+        return Line(0, var(yArr, size));
+    }
+    float a = covariance / variance;
+    float b = var(yArr, size) - a * variance;
     return Line(a, b);
 }
 
