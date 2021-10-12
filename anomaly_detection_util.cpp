@@ -9,7 +9,7 @@
  * return expectancy
  */
 float expectancy(float *x, int size) {
-    if(size <= 0) {
+    if (size <= 0) {
         return 0;
     }
     // this loop sums the values of the array.
@@ -17,7 +17,7 @@ float expectancy(float *x, int size) {
     for (int i = 1; i <= size; i++) {
         sum += x[i];
     }
-    return (float)sum / (float) size;
+    return (float) sum / (float) size;
 }
 
 /**
@@ -27,7 +27,7 @@ float expectancy(float *x, int size) {
  * @return the variance of X and Y
  */
 float var(float *x, int size) {
-    if(size <= 0) {
+    if (size <= 0) {
         return 0;
     }
     float sum = 0;
@@ -35,7 +35,7 @@ float var(float *x, int size) {
         sum += (x[i] * x[i]);
     }
     float avg = sum / (float) size;
-    return avg - expectancy(x, size); ///לא צריך להיות בריבוע?????????????????
+    return avg - powf(expectancy(x, size), 2);
 }
 
 /**
@@ -62,7 +62,7 @@ float cov(float *x, float *y, int size) {
  * @param size
  */
 float pearson(float *x, float *y, int size) {
-    if(size <= 0) {
+    if (size <= 0) {
         return 0;
     }
     return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
@@ -75,7 +75,7 @@ float pearson(float *x, float *y, int size) {
  * @return Line.
  */
 Line linear_reg(Point **points, int size) {
-    if(size <= 0) {
+    if (size <= 0) {
         return // what we should return???
     }
     float xArr[size], yArr[size];
@@ -85,7 +85,7 @@ Line linear_reg(Point **points, int size) {
     }
     float covariance = cov(xArr, yArr, size);
     float variance = var(xArr, size);
-    if((covariance || variance) == 0) {
+    if ((covariance || variance) == 0) {
         return Line(0, var(yArr, size));
     }
     float a = covariance / variance;
