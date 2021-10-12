@@ -75,9 +75,6 @@ float pearson(float *x, float *y, int size) {
  * @return Line.
  */
 Line linear_reg(Point **points, int size) {
-    if (size <= 0) {
-        return // what we should return???
-    }
     float xArr[size], yArr[size];
     for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->getX();
