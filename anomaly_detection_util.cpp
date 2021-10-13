@@ -86,7 +86,7 @@ Line linear_reg(Point **points, int size) {
         return Line(0, var(yArr, size));
     }
     float a = covariance / variance;
-    float b = var(yArr, size) - a * variance;
+    float b = expectancy(yArr, size) - a * expectancy(xArr, size);
     return Line(a, b);
 }
 
