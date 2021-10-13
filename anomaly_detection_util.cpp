@@ -14,7 +14,7 @@ float expectancy(float *x, int size) {
     }
     // this loop sums the values of the array.
     float sum = 0;
-    for (int i = 1; i <= size; i++) {
+    for (int i = 0; i < size; i++) {
         sum += x[i];
     }
     return (float) sum / (float) size;

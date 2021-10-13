@@ -55,7 +55,7 @@ void test_linear_reg(Point ***listOfListOfPoints, Line **r, int sizeOfList, int 
     printf("passed all tests for linear reg\n");
 
 }
-/**
+
 int main() {
     float *a = new float[4]{1, 2, 3, 4};
     float *b = new float[5]{55, 885, 52, 529, 7};
@@ -109,7 +109,6 @@ int main() {
     Line *line = new Line(1, 0);
     printf("%f", dev(*new Point(3, 1), *line));
     /*******************************************************
-
-}
 */
+}
 
