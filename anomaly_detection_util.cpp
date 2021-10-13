@@ -90,7 +90,6 @@ Line linear_reg(Point **points, int size) {
     return Line(a, b);
 }
 
-
 /**
  * returns the deviation between point p and the line.
  * @author Roei and Itay
