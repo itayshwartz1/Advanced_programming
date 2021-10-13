@@ -46,7 +46,7 @@ float var(float *x, int size) {
  **/
 float cov(float *x, float *y, int size) {
     //This loop creat a new array from x and y, means xy...
-    float xy[size];
+    float *xy = new float[size];
     for (int i = 0; i < size; i++) {
         xy[i] = x[i] * y[i];
     }
@@ -75,7 +75,7 @@ float pearson(float *x, float *y, int size) {
  * @return Line.
  */
 Line linear_reg(Point **points, int size) {
-    float xArr[size], yArr[size];
+    float *xArr = new float[size], *yArr = new float[size];
     for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->getX();
         yArr[i] = points[i]->getY();
