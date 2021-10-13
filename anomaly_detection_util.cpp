@@ -2,6 +2,15 @@
 #include <cmath>
 #include "anomaly_detection_util.h"
 
+/**
+ * TODO
+ * 1. check if size ==0.
+ * 2. check in pearson, what happen if one of the sigma == 0. (line 71)
+ * 3. check in linear reg, what happen if var == 0. (line 91).
+ * 4, check in linear reg, what happen if the line is vertical.
+ * 5.
+ */
+
 
 /**
  * @date 11/10/21 18:39

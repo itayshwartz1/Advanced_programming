@@ -46,7 +46,7 @@ void testPearson(float ***x, float *r, int sizeOfX, int sizeOfInX) {
 void test_linear_reg(Point ***listOfListOfPoints, Line **r, int sizeOfList, int sizeOfSubList) {
     for (int i = 0; i < sizeOfList; ++i) {
         Line line = linear_reg(listOfListOfPoints[i], sizeOfSubList);
-        if (!dif(line.a, r[i]->a, 0.1) || !dif(line.b, r[i]->b, 0.01)) {
+        if (!dif(line.a, r[i]->a, 0.01) || !dif(line.b, r[i]->b, 0.01)) {
             printf("%d ", i);
             printf("linear reg test failed\n");
             return;
