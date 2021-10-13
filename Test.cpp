@@ -56,6 +56,7 @@ void test_linear_reg(Point ***listOfListOfPoints, Line **r, int sizeOfList, int 
 
 }
 
+
 int main() {
     float *a = new float[4]{1, 2, 3, 4};
     float *b = new float[5]{55, 885, 52, 529, 7};
