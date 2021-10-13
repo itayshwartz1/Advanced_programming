@@ -26,25 +26,13 @@ void testVar(float** bArr){
 
 
 }
-
-// Function to find mean.
-float mean(float arr[], int n)
-{
-    float sum = 0;
-    for(int i = 0; i < n; i++)
-        sum = sum + arr[i];
-    return sum / n;
-}
-// Function to find covariance.
-float covariance(float arr1[], float arr2[], int n)
-{
-    float sum = 0;
-    for(int i = 0; i < n; i++)
-        sum = sum + (arr1[i] - mean(arr1, n)) *
-                    (arr2[i] - mean(arr2, n));
-    return sum / (n - 1);
-}
-
-void testCoVar(float** bArr){
-
+int main(){
+    float *a = new float[4]{1, 2, 3, 4};
+    float *b = new float[5]{55, 885, 52, 529, 7};
+    float *c = new float[6]{7, 65, 32, 0, 23, 41};
+    float *d = new float[7]{8, 26, 1, 9, 9, 44, 42};
+    float *e = new float[8]{562, 23, 20, 765, 323, 36, 2, 9};
+    float *f = new float[9]{3, 216, 16, 62, 20, 4, 36, 6, 45};
+    float *g = new float[10]{89, 416, 214, 6, 56, 56, 417, 52, 9, 10};
+    float** bArr = new float[7][a,b,c,d,e,f,g,]
 }
