@@ -4,8 +4,9 @@
 
 #include <cmath>
 #include "Test_Original.h"
+#include "anomaly_detection_util.h"
 // Function for calculating variance
-float internetVariance(int a[], int n) {
+float internetVariance(float a[], int n) {
     // Compute mean (average of elements)
     int sum = 0;
     for (int i = 0; i < n; i++)
@@ -22,9 +23,12 @@ float internetVariance(int a[], int n) {
     return sqDiff / n;
 }
 
-void testVar(float** bArr){
+void testVar(float** bigArr){
+    for(int i = 0; i< sizeof(bigArr)/sizeof(float ); i++) {
+        if(internetVariance(bigArr[i], sizeof(bigArr[i])/sizeof(float)) != ) {
 
-
+        }
+    }
 }
 int main(){
     float *a = new float[4]{1, 2, 3, 4};
@@ -34,5 +38,5 @@ int main(){
     float *e = new float[8]{562, 23, 20, 765, 323, 36, 2, 9};
     float *f = new float[9]{3, 216, 16, 62, 20, 4, 36, 6, 45};
     float *g = new float[10]{89, 416, 214, 6, 56, 56, 417, 52, 9, 10};
-    float** bArr = new float[7][a,b,c,d,e,f,g,]
+    float **bigArr = new float *[7]{a, b, c, d, e, f, g};
 }
