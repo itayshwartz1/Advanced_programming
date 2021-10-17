@@ -4,7 +4,7 @@
 
 /**
  * TODO
- * 1. check if size ==0.
+ * 1. check if size == 0.
  * 2. check in pearson, what happen if one of the sigma == 0. (line 71)
  * 3. check in linear reg, what happen if var == 0. (line 91).
  * 4, check in linear reg, what happen if the line is vertical.
@@ -13,13 +13,17 @@
 
 
 /**
- * @date 11/10/21 18:39
  * calculate life expectancy
- * return expectancy
+ * @date 11/10/21 18:39
+ * @param x, size
+ * @return expectancy
  */
 float expectancy(float *x, int size) {
-    if (size <= 0) {
-        return 0;
+    if (size <= 0 ) {
+        throw "size = 0 ";
+    }
+    if(x == nullptr) {
+        throw "nullptr Exception";
     }
     // this loop sums the values of the array.
     float sum = 0;
@@ -30,14 +34,17 @@ float expectancy(float *x, int size) {
 }
 
 /**
+ * This function return the variance.
  * @date 11/10/21 18:39
- * @param x
- * @param size
+ * @param x, size
  * @return the variance of X and Y
  */
 float var(float *x, int size) {
-    if (size <= 0) {
-        return 0;
+    if (size <= 0 ) {
+        throw "size = 0 ";
+    }
+    if(x == nullptr) {
+        throw "nullptr Exception";
     }
     float sum = 0;
     for (int i = 0; i < size; i++) {
@@ -48,14 +55,17 @@ float var(float *x, int size) {
 }
 
 /**
+ * The cov function return the covariance of variables X and Y. 𝑐𝑜𝑣(𝑋, 𝑌) = 𝐸((𝑋 − 𝐸(𝑋))(𝑌 − 𝐸(𝑌)).
  * @date 11/10
  * @param x, y, size
- * The cov function return the covariance of variables X and Y. 𝑐𝑜𝑣(𝑋, 𝑌) = 𝐸((𝑋 − 𝐸(𝑋))(𝑌 − 𝐸(𝑌)).
  * @return the covariance.
  **/
 float cov(float *x, float *y, int size) {
-    if (size <= 0) {
-        return 0;
+    if (size <= 0 ) {
+        throw "size = 0 ";
+    }
+    if(x == nullptr || y == nullptr) {
+        throw "nullptr Exception";
     }
     //This loop creat a new array from x and y, means xy...
     float *xy = new float[size];
@@ -63,31 +73,42 @@ float cov(float *x, float *y, int size) {
         xy[i] = x[i] * y[i];
     }
     float *ptr_xy = xy;
+    delete[](xy);
     //Return the covariance.
     return expectancy(ptr_xy, size) - expectancy(x, size) * expectancy(y, size);
 }
 
 /**
  * returns the Pearson correlation coefficient of X and Y
- * @param x
- * @param y
- * @param size
+ * @date 17/10
+ * @param x, y, size
+ * @return float
  */
 float pearson(float *x, float *y, int size) {
-    if (size <= 0) {
-        return 0;
+    if (size <= 0 ) {
+        throw "size = 0 ";
+    }
+    if(x == nullptr || y == nullptr) {
+        throw "nullptr Exception";
     }
     return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
 }
 
 /**
  * performs a linear regression and return s the line equation
- * @date 12/10/21 13:10
+ * @date 12/10/21
  * @param points, size
  * @return Line.
  */
 Line linear_reg(Point **points, int size) {
-    float *xArr = new float[size], *yArr = new float[size];
+    if (size <= 0 ) {
+        throw "size = 0 ";
+    }
+    if(points == nullptr) {
+        throw "nullptr Exception";
+    }
+    float *xArr = new float[size];
+    float *yArr = new float[size];
     for (int i = 0; i < size; i++) {
         xArr[i] = points[i]->x;
         yArr[i] = points[i]->y;
@@ -99,16 +120,16 @@ Line linear_reg(Point **points, int size) {
     }
     float a = covariance / variance;
     float b = expectancy(yArr, size) - a * expectancy(xArr, size);
+    delete(xArr);
+    delete(yArr);
     return Line(a, b);
 }
 
 /**
  * returns the deviation between point p and the line.
- * @author Roei and Itay
  * @date19:55 11/10/21
- * @param p
- * @param l
- * @return
+ * @param p, l
+ * @return float
  */
 float dev(Point p, Line l) {
     return fabsf(p.x - l.f(p.x));
@@ -116,11 +137,16 @@ float dev(Point p, Line l) {
 
 /**
  * returns the deviation between point p and the line equation of the points
- * @param p
- * @param points
- * @param size
- * @return
+ * @date 17/10
+ * @param p, points, size
+ * @return float
  */
 float dev(Point p, Point **points, int size) {
+    if (size <= 0 ) {
+        throw "size = 0 ";
+    }
+    if(points == nullptr) {
+        throw "nullptr Exception";
+    }
     return dev(p, linear_reg(points, size));
 }
