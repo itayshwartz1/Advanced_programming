@@ -73,9 +73,10 @@ float cov(float *x, float *y, int size) {
         xy[i] = x[i] * y[i];
     }
     float *ptr_xy = xy;
+    float result =expectancy(ptr_xy, size);
     delete[](xy);
     //Return the covariance.
-    return expectancy(ptr_xy, size) - expectancy(x, size) * expectancy(y, size);
+    return result - expectancy(x, size) * expectancy(y, size);
 }
 
 /**
