@@ -133,7 +133,7 @@ Line linear_reg(Point **points, int size) {
  * @return float
  */
 float dev(Point p, Line l) {
-    return fabsf(p.x - l.f(p.x));
+    return fabsf(p.y - l.f(p.x));
 }
 
 /**
