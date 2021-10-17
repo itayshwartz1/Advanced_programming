@@ -54,6 +54,9 @@ float var(float *x, int size) {
  * @return the covariance.
  **/
 float cov(float *x, float *y, int size) {
+    if (size <= 0) {
+        return 0;
+    }
     //This loop creat a new array from x and y, means xy...
     float *xy = new float[size];
     for (int i = 0; i < size; i++) {
@@ -86,8 +89,8 @@ float pearson(float *x, float *y, int size) {
 Line linear_reg(Point **points, int size) {
     float *xArr = new float[size], *yArr = new float[size];
     for (int i = 0; i < size; i++) {
-        xArr[i] = points[i]->getX();
-        yArr[i] = points[i]->getY();
+        xArr[i] = points[i]->x;
+        yArr[i] = points[i]->y;
     }
     float covariance = cov(xArr, yArr, size);
     float variance = var(xArr, size);
@@ -108,7 +111,7 @@ Line linear_reg(Point **points, int size) {
  * @return
  */
 float dev(Point p, Line l) {
-    return fabsf(p.getY() - l.f(p.getX()));
+    return fabsf(p.x - l.f(p.x));
 }
 
 /**
