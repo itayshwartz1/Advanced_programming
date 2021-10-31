@@ -1,13 +1,8 @@
-//
-// Created by yhood on 31/10/2021.
-//
 
 #ifndef DEV_ANOMALYDETECTOR_H
 #define DEV_ANOMALYDETECTOR_H
-class TimeSeries{
-    double features_table[][];
 
-};
+
 class AnomalyReport{
 public:
     const string description;
