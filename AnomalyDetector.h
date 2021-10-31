@@ -4,7 +4,10 @@
 
 #ifndef DEV_ANOMALYDETECTOR_H
 #define DEV_ANOMALYDETECTOR_H
-class TimeSeries{ /*...*/};
+class TimeSeries{
+    double features_table[][];
+
+};
 class AnomalyReport{
 public:
     const string description;

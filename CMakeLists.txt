@@ -3,5 +3,3 @@ project(dev)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(dev anomaly_detection_util.cpp anomaly_detection_util.h SimpleAnomalyDetector.h AnomalyDetector.h
-        SimpleAnomalyDetector.cpp)
