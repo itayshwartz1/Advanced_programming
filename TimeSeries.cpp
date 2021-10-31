@@ -6,27 +6,36 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
+#include <sstream>
+#include <string>
 
-class TimeSeries{
-    char** feature_table;
+TimeSeries::TimeSeries(char* fileName) {
+    const std::vector<std::vector<std::string>>feature_table;
+    std::ifstream my_File(fileName);
 
-    TimeSeries(char* fileName){
-        std::ifstream myFile;
-        myFile.open(fileName);
-        //while there is something in the file keep reading it.
-        string line;
-        while(myFile.good())
-            //read the text until the comma and store it to line.
-            myFile.(fileName, line, ',');
+    if (!my_File.is_open()) {
+        std::cout << "ERROR" << std::endl;
+        exit(1);
     }
 
-//    ~TimeSeries(){
-//
-//    }
-//    double getValueInFeature(int i, int j){
-//
-//    }
+    std::string line;
+    std::string word;
+    while (my_File.good()) {
+        std::getline(my_File, line, '\n');
+        std::stringstream ss(line);
+        std::string word;
+
+        int start = 0;
+       std::string del =  ",";
+        int end = line.find(',');
+        while (end != -1) {
+            //add the data.
+            //feature_table.push_back()
+            start = end + del.size();
+            end = line.find(del, start);
+        }
+    }
+    my_File.close();
+}
 
 
-};
