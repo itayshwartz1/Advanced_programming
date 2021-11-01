@@ -5,6 +5,7 @@
 #include "TimeSeries.h"
 #include <iostream>
 #include <string>
+
 using std::string;
 using std::vector;
 using std::getline;
@@ -26,7 +27,7 @@ TimeSeries::TimeSeries(char *fileName) {
             if (first_line) {
                 createKeysFromLine(line);
                 first_line = 0;
-            //if we creat before to the table vector - we just add the data to the existing vectors by order.
+                //if we creat before to the table vector - we just add the data to the existing vectors by order.
             } else {
                 addValuesFromLine(line);
             }
@@ -60,26 +61,22 @@ void TimeSeries::createKeysFromLine(string line) {
  */
 void TimeSeries::addValuesFromLine(string line) {
     int pos = 0;
-
-    if(0 == feature_table.size()) {
-        if(0 == feature_names.size()) {
-
-        } else {
-            for (auto & i : feature_names) {
-                int counter = line.find(',',pos);
-                string temp = line.substr(pos, counter);
-                double double_temp = stoi(temp,)
-                i.push_back(temp);
-                line.erase(pos, counter + 1);
-            }
+    if (feature_names.empty()) {
+        for (auto &i: feature_names) {
+            int counter = line.find(',', pos);
+            string temp = line.substr(pos, counter);
+            std::vector<double> new_vec;
+            new_vec.push_back(std::stod(temp));
+            feature_table.push_back(new_vec);
+            line.erase(pos, counter + 1);
         }
-    }
-
-    for (auto & i : feature_names) {
-        int counter = line.find(',',pos);
-        string temp = line.substr(pos, counter);
-        i.push_back(temp);
-        line.erase(pos, counter + 1);
+    } else {
+        for (auto &i: feature_table) {
+            int counter = line.find(',', pos);
+            string temp = line.substr(pos, counter);
+            i.push_back(std::stod(temp));
+            line.erase(pos, counter + 1);
+        }
     }
 }
 
@@ -87,11 +84,11 @@ void TimeSeries::addValuesFromLine(string line) {
  * This function return
  * @return const vector<vector<string> >
  */
-vector<vector<double> > TimeSeries::getFeatureTable() const{
+vector<vector<double> > TimeSeries::getFeatureTable() const {
     return feature_table;
 }
 
-vector<std::string> TimeSeries::getNameTable() const{
+vector<std::string> TimeSeries::getNameTable() const {
     return feature_names;
 }
 
