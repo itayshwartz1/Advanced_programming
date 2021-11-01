@@ -105,14 +105,14 @@ Line linear_reg(vector<Point> points, int size) {
     if (size <= 0) {
         throw "size = 0 ";
     }
-    if (points ) {
+    if (0 == points.size()) {
         throw "nullptr Exception";
     }
     float *xArr = new float[size];
     float *yArr = new float[size];
     for (int i = 0; i < size; i++) {
-        xArr[i] = points[i]->x;
-        yArr[i] = points[i]->y;
+        xArr[i] = points[i].x;
+        yArr[i] = points[i].y;
     }
     float covariance = cov(xArr, yArr, size);
     float variance = var(xArr, size);
@@ -146,8 +146,8 @@ float dev(Point p, vector<Point> points, int size) {
     if (size <= 0) {
         throw "size = 0 ";
     }
-    if (points == nullptr) {
-        throw "nullptr Exception";
+    if (0 == points.size()) {
+        throw "empty points Exception";
     }
     return dev(p, linear_reg(points, size));
 }
