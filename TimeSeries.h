@@ -8,37 +8,21 @@
 
 #include <iostream>
 #include <fstream>
+
+#include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
+class TimeSeries{
 
+public:TimeSeries(char *fileName);
 
-class TimeSeries {
-    const vector<vector<string>> feature_table;
+    std::vector<std::vector<std::string> > feature_table;
 
-    TimeSeries(char *fileName) {
-        std::ifstream myFile;
-        myFile.open(fileName);
-        //while there is something in the file keep reading it.
-        string line;
-        while (myFile.good())
-            //read the text until the comma and store it to line.
-            myFile.(fileName, line, ',');
-    }
+    void createKeysFromLine(std::string basicString);
 
-//    ~TimeSeries(){
-//
-//    }
-//    double getValueInFeature(int i, int j){
-//
-//    }
+    void addValuesFromLine(std::string basicString);
 
-    const vector<vector<string>>*  getFeatureTable() const{
-        return &feature_table;
-    }
-
-
+    const std::vector<std::vector<std::string>> getFeatureTable() const;
 };
 
 #endif //DEV_TIMESERIES_H
