@@ -23,6 +23,7 @@ public:TimeSeries(char *fileName);
     void addValuesFromLine(std::string basicString);
 
     std::vector<std::vector<std::string>> getFeatureTable() const;
+
 };
 
 #endif //DEV_TIMESERIES_H
