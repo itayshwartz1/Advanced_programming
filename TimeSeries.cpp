@@ -78,6 +78,6 @@ void TimeSeries::addValuesFromLine(std::string line) {
  * This function return
  * @return const std::vector<std::vector<std::string> >
  */
-const std::vector<std::vector<std::string> > TimeSeries::getFeatureTable() const{
+std::vector<std::vector<std::string> > TimeSeries::getFeatureTable() const{
     return feature_table;
 }
