@@ -22,20 +22,20 @@ struct correlatedFeatures {
 
 class SimpleAnomalyDetector : public TimeSeriesAnomalyDetector {
 public:
-    correlatedFeatures c;
+    correlatedFeatures cor;
     std::vector<correlatedFeatures> normal_model;
 
     explicit SimpleAnomalyDetector(correlatedFeatures c);
 
-    vector<Point> corrlatedCreatPoints(vector<float>, vector<float>);
+    vector<Point> corrlatedCreatPoints(vector<double>, vector<double>);
 
     SimpleAnomalyDetector();
 
     ~SimpleAnomalyDetector() override;
 
-    virtual void learnNormal(const TimeSeries &ts);
+     void learnNormal(const TimeSeries &ts) override;
 
-    virtual vector<AnomalyReport> detect(const TimeSeries &ts);
+    virtual vector<AnomalyReport> detect(const TimeSeries &ts) override;
 
     virtual vector<correlatedFeatures> getNormalModel();
 };

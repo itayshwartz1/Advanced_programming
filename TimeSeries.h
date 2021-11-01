@@ -16,7 +16,7 @@ class TimeSeries{
 
 public:TimeSeries(char *fileName);
 
-    std::vector<std::vector<std::string> > feature_table;
+    std::vector<std::vector<double> > feature_table;
 
     void createKeysFromLine(std::string basicString);
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include "anomaly_detection_util.h"
+#include <exception>
 
 /**
  * TODO
@@ -68,7 +69,7 @@ float cov(float *x, float *y, int size) {
         throw "nullptr Exception";
     }
     //This loop creat a new array from x and y, means xy...
-    float *xy = new float[size];
+    auto *xy = new float[size];
     for (int i = 0; i < size; i++) {
         xy[i] = x[i] * y[i];
     }
@@ -101,11 +102,11 @@ float pearson(float *x, float *y, int size) {
  * @param points, size
  * @return Line.
  */
-Line linear_reg(vector<Point> points, int size) {
+Line linear_reg(Point* points, int size) {
     if (size <= 0) {
         throw "size = 0 ";
     }
-    if (0 == points.size()) {
+    if (points== nullptr) {
         throw "nullptr Exception";
     }
     float *xArr = new float[size];
@@ -117,13 +118,13 @@ Line linear_reg(vector<Point> points, int size) {
     float covariance = cov(xArr, yArr, size);
     float variance = var(xArr, size);
     if ((covariance || variance) == 0) {
-        return Line(0, var(yArr, size));
+        return {0, var(yArr, size)};
     }
     float a = covariance / variance;
     float b = expectancy(yArr, size) - a * expectancy(xArr, size);
     delete[]xArr;
     delete[]yArr;
-    return Line(a, b);
+    return {a, b};
 }
 
 /**
