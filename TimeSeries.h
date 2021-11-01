@@ -16,13 +16,16 @@ class TimeSeries{
 
 public:TimeSeries(char *fileName);
 
-    std::vector<std::vector<std::string> > feature_table;
+    std::vector<std::vector<double> > feature_table;
+    std::vector<std::string> feature_names;
 
     void createKeysFromLine(std::string basicString);
 
     void addValuesFromLine(std::string basicString);
 
-    std::vector<std::vector<std::string>> getFeatureTable() const;
+    int size() const;
+
+    std::vector<vector < double>> getFeatureTable() const;
 
 };
 

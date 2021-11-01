@@ -47,18 +47,11 @@ void TimeSeries::createKeysFromLine(string line) {
     //we split the line and add the data to new vectors and push them into the feature_table.
     while ((pos = line.find(delimiter)) != string::npos) {
         token = line.substr(0, pos);
-        vector<string> temp;
-        temp.push_back(token);
-        feature_table.push_back(temp);
+        feature_names.push_back(token);
         line.erase(0, pos + delimiter.length());
     }
-
     //we add one more vector because the last token finished without ',' - so we need to add it anyway.
-    vector<string> temp;
-    temp.push_back(line);
-    feature_table.push_back(temp);
-
-
+    feature_names.push_back(token);
 }
 
 /**
@@ -67,7 +60,22 @@ void TimeSeries::createKeysFromLine(string line) {
  */
 void TimeSeries::addValuesFromLine(string line) {
     int pos = 0;
-    for (auto & i : feature_table) {
+
+    if(0 == feature_table.size()) {
+        if(0 == feature_names.size()) {
+
+        } else {
+            for (auto & i : feature_names) {
+                int counter = line.find(',',pos);
+                string temp = line.substr(pos, counter);
+                double double_temp = stoi(temp,)
+                i.push_back(temp);
+                line.erase(pos, counter + 1);
+            }
+        }
+    }
+
+    for (auto & i : feature_names) {
         int counter = line.find(',',pos);
         string temp = line.substr(pos, counter);
         i.push_back(temp);
@@ -79,6 +87,14 @@ void TimeSeries::addValuesFromLine(string line) {
  * This function return
  * @return const vector<vector<string> >
  */
-vector<vector<string> > TimeSeries::getFeatureTable() const{
+vector<vector<double> > TimeSeries::getFeatureTable() const{
     return feature_table;
+}
+
+vector<std::string> TimeSeries::getFeatureTable() const{
+    return feature_names;
+}
+
+int TimeSeries::size() const {
+    return feature_table.size();
 }
