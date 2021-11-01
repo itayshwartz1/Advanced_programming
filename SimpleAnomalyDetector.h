@@ -33,7 +33,7 @@ public:
 
     ~SimpleAnomalyDetector() override;
 
-    virtual void learnNormal(const TimeSeries &ts) override;
+    virtual void learnNormal(const TimeSeries &ts);
 
     virtual vector<AnomalyReport> detect(const TimeSeries &ts);
 

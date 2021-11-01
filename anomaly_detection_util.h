@@ -6,6 +6,9 @@
 #define DEV_ANOMALY_DETECTION_UTIL_H
 
 #include <cmath>
+#include <vector>
+
+using std::vector;
 
 /**
  * calculate life expectancy
