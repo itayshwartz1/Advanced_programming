@@ -25,8 +25,9 @@ public:TimeSeries(char *fileName);
 
     int size() const;
 
-    std::vector<vector < double>> getFeatureTable() const;
+    std::vector<std::vector< double>> getFeatureTable() const;
 
+    std::vector<std::string> getNameTable() const;
 };
 
 #endif //DEV_TIMESERIES_H

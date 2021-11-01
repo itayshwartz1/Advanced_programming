@@ -91,7 +91,7 @@ vector<vector<double> > TimeSeries::getFeatureTable() const{
     return feature_table;
 }
 
-vector<std::string> TimeSeries::getFeatureTable() const{
+vector<std::string> TimeSeries::getNameTable() const{
     return feature_names;
 }
 
