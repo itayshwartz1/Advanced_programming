@@ -11,6 +11,7 @@
 #include <fstream>
 
 int main(){
+
     TimeSeries* timeSeries = new TimeSeries("D:\\Advanced_programming\\file.csv");
 
     return 0;

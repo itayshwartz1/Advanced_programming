@@ -12,10 +12,14 @@
 #include <vector>
 
 class TimeSeries{
-    char** feature_table;
     TimeSeries();
 
 public:TimeSeries(char *fileName);
+    std::vector<std::vector<std::string> > feature_table;
+
+    void createKeysFromLine(std::string basicString);
+
+    void addValuesFromLine(std::string basicString);
 };
 
 #endif //DEV_TIMESERIES_H
