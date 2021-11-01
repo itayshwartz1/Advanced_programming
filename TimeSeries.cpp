@@ -55,7 +55,7 @@ void TimeSeries::addValuesFromLine(std::string line) {
         int counter = line.find(',',pos);
         std::string temp = line.substr(pos, counter);
         feature_table[i].push_back(temp);
-        line.erase(pos, counter);
+        line.erase(pos, counter + 1);
     }
 }
 
