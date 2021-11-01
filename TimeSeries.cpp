@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
+
 
 class TimeSeries{
     char** feature_table;

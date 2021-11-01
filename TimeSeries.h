@@ -8,17 +8,21 @@
 
 #include <iostream>
 #include <fstream>
-using namespace std;
+#include <vector>
 
-class TimeSeries{
-    const char **featureTable;
+using std::string;
+using std::vector;
 
-    TimeSeries(char* fileName){
+
+class TimeSeries {
+    const vector<vector<string>> feature_table;
+
+    TimeSeries(char *fileName) {
         std::ifstream myFile;
         myFile.open(fileName);
         //while there is something in the file keep reading it.
         string line;
-        while(myFile.good())
+        while (myFile.good())
             //read the text until the comma and store it to line.
             myFile.(fileName, line, ',');
     }
@@ -30,8 +34,8 @@ class TimeSeries{
 //
 //    }
 
-    const char** getFeatureTable(){
-        return featureTable;
+    const vector<vector<string>>*  getFeatureTable() const{
+        return &feature_table;
     }
 
 

@@ -39,10 +39,11 @@ public:
     float x, y;
 
     Point(float x, float y) : x(x), y(y) {}
+
 };
 
 // performs a linear regression and return s the line equation
-Line linear_reg(Point **points, int size);
+Line linear_reg(vector<Point>, int size);
 
 // returns the deviation between point p and the line equation of the points
 float dev(Point p, Point **points, int size);
