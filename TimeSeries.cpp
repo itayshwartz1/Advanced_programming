@@ -4,8 +4,8 @@
 
 #include "TimeSeries.h"
 #include <iostream>
-#include <string>
 
+#include <string>
 
 /**
  * This is the main builder of TimeSeries. is creat a new table from csv file.
@@ -29,6 +29,7 @@ TimeSeries::TimeSeries(char *fileName) {
                 addValuesFromLine(line);
             }
         }
+
     }
     myfile.close();
 }

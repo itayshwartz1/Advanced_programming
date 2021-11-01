@@ -19,10 +19,10 @@
  * @return expectancy
  */
 float expectancy(float *x, int size) {
-    if (size <= 0 ) {
+    if (size <= 0) {
         throw "size = 0 ";
     }
-    if(x == nullptr) {
+    if (x == nullptr) {
         throw "nullptr Exception";
     }
     // this loop sums the values of the array.
@@ -40,10 +40,10 @@ float expectancy(float *x, int size) {
  * @return the variance of X and Y
  */
 float var(float *x, int size) {
-    if (size <= 0 ) {
+    if (size <= 0) {
         throw "size = 0 ";
     }
-    if(x == nullptr) {
+    if (x == nullptr) {
         throw "nullptr Exception";
     }
     float sum = 0;
@@ -61,10 +61,10 @@ float var(float *x, int size) {
  * @return the covariance.
  **/
 float cov(float *x, float *y, int size) {
-    if (size <= 0 ) {
+    if (size <= 0) {
         throw "size = 0 ";
     }
-    if(x == nullptr || y == nullptr) {
+    if (x == nullptr || y == nullptr) {
         throw "nullptr Exception";
     }
     //This loop creat a new array from x and y, means xy...
@@ -73,8 +73,8 @@ float cov(float *x, float *y, int size) {
         xy[i] = x[i] * y[i];
     }
     float *ptr_xy = xy;
-    float result =expectancy(ptr_xy, size);
-    delete[](xy);
+    float result = expectancy(ptr_xy, size);
+    delete[xy];
     //Return the covariance.
     return result - expectancy(x, size) * expectancy(y, size);
 }
@@ -86,10 +86,10 @@ float cov(float *x, float *y, int size) {
  * @return float
  */
 float pearson(float *x, float *y, int size) {
-    if (size <= 0 ) {
+    if (size <= 0) {
         throw "size = 0 ";
     }
-    if(x == nullptr || y == nullptr) {
+    if (x == nullptr || y == nullptr) {
         throw "nullptr Exception";
     }
     return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
@@ -101,11 +101,11 @@ float pearson(float *x, float *y, int size) {
  * @param points, size
  * @return Line.
  */
-Line linear_reg(Point **points, int size) {
-    if (size <= 0 ) {
+Line linear_reg(vector <Point> points, int size) {
+    if (size <= 0) {
         throw "size = 0 ";
     }
-    if(points == nullptr) {
+    if (points == nullptr) {
         throw "nullptr Exception";
     }
     float *xArr = new float[size];
@@ -121,8 +121,8 @@ Line linear_reg(Point **points, int size) {
     }
     float a = covariance / variance;
     float b = expectancy(yArr, size) - a * expectancy(xArr, size);
-    delete(xArr);
-    delete(yArr);
+    delete[xArr];
+    delete[yArr];
     return Line(a, b);
 }
 
@@ -142,11 +142,11 @@ float dev(Point p, Line l) {
  * @param p, points, size
  * @return float
  */
-float dev(Point p, Point **points, int size) {
-    if (size <= 0 ) {
+float dev(Point p, vector <Point> points, int size) {
+    if (size <= 0) {
         throw "size = 0 ";
     }
-    if(points == nullptr) {
+    if (points == nullptr) {
         throw "nullptr Exception";
     }
     return dev(p, linear_reg(points, size));
