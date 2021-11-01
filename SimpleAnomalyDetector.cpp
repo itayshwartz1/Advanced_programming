@@ -3,13 +3,17 @@
 //
 #include "SimpleAnomalyDetector.h"
 
+
 SimpleAnomalyDetector::SimpleAnomalyDetector(correlatedFeatures c) : TimeSeriesAnomalyDetector(), c(c) {}
 
 SimpleAnomalyDetector::~SimpleAnomalyDetector() {
 }
 
 
-vector <AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {}
+vector <AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
+    for(int i = 0; i < ts.size(); i++ ){
+    }
+}
 
 std::vector <correlatedFeatures> SimpleAnomalyDetector::getNormalModel() {
     return normal_model;

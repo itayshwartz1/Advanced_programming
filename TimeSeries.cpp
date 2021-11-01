@@ -82,3 +82,7 @@ void TimeSeries::addValuesFromLine(string line) {
 vector<vector<string> > TimeSeries::getFeatureTable() const{
     return feature_table;
 }
+
+int TimeSeries::size() const {
+    return feature_table.size();
+}

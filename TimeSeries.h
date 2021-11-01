@@ -22,6 +22,8 @@ public:TimeSeries(char *fileName);
 
     void addValuesFromLine(std::string basicString);
 
+    int size() const;
+
     std::vector<std::vector<std::string>> getFeatureTable() const;
 
 };
