@@ -16,7 +16,6 @@ std::vector<correlatedFeatures> SimpleAnomalyDetector::getNormalModel() {
 }
 
 SimpleAnomalyDetector::SimpleAnomalyDetector() {
-
 }
 
 /**
