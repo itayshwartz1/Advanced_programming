@@ -4,6 +4,7 @@
 
 #include "TimeSeries.h"
 
-int main() {
-    TimeSeries *timeSeries = new TimeSeries("D:\\Advanced_programming\\file.csv");
+int main(int argc, char **argv) {
+    TimeSeries *timeSeries = new TimeSeries(argv[1]);
+
 }
