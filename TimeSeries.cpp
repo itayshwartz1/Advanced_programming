@@ -15,6 +15,8 @@ using std::getline;
  * @param fileName
  */
 TimeSeries::TimeSeries(char *fileName) {
+    feature_table = {};
+    feature_names = {};
     std::fstream myfile;
     //open file and read mode.
     myfile.open(fileName, std::ios::in);
@@ -60,19 +62,20 @@ void TimeSeries::createNamesTable(string line) {
  * @param line
  */
 void TimeSeries::createValuesTable(string line) {
+
     int pos = 0;
+    int counter = 0;
     float temp;
-    if (feature_names.empty()) {
+    if (feature_table.empty()) {
         while ((pos = (int) line.find(',')) != string::npos) {
-            int counter = (int) line.find(',', pos);
-            temp = std::stof(line.substr(pos, counter));
+            temp = std::stof(line.substr(counter , pos));
             vector<float> new_vec;
             new_vec.push_back(temp);
             feature_table.push_back(new_vec);
-            line.erase(pos, counter + 1);
+            line.erase(counter, pos + 1);
         }
         vector<float> new_vec;
-        new_vec.push_back(temp);
+        new_vec.push_back(std::stof(line));
         feature_table.push_back(new_vec);
 
 
