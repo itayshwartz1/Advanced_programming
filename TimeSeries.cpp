@@ -25,11 +25,11 @@ TimeSeries::TimeSeries(char *fileName) {
         while (getline(myfile, line)) {
             //if it's the first line - we added the data to br the headline of the vector.
             if (first_line) {
-                createKeysFromLine(line);
+                createNamesTable(line);
                 first_line = 0;
                 //if we creat before to the table vector - we just add the data to the existing vectors by order.
             } else {
-                addValuesFromLine(line);
+                createValuesTable(line);
             }
         }
     }
@@ -40,12 +40,12 @@ TimeSeries::TimeSeries(char *fileName) {
  * This function creat new vectors to the table. the first data in the vectors is the given data.
  * @param line
  */
-void TimeSeries::createKeysFromLine(string line) {
+void TimeSeries::createNamesTable(string line) {
     size_t pos = 0;
     string token;
     string delimiter = ",";
 
-    //we split the line and add the data to new vectors and push them into the feature_table.
+    //we split the line and add the data to the feature_name.
     while ((pos = line.find(delimiter)) != string::npos) {
         token = line.substr(0, pos);
         feature_names.push_back(token);
@@ -59,22 +59,28 @@ void TimeSeries::createKeysFromLine(string line) {
  * This function add values to the existing table by the order they been given.
  * @param line
  */
-void TimeSeries::addValuesFromLine(string line) {
+void TimeSeries::createValuesTable(string line) {
     int pos = 0;
+    float temp;
     if (feature_names.empty()) {
-        for (auto &i: feature_names) {
-            int counter = line.find(',', pos);
-            string temp = line.substr(pos, counter);
-            std::vector<double> new_vec;
-            new_vec.push_back(std::stod(temp));
+        while ((pos = (int)line.find(',')) != string::npos) {
+            int counter = (int)line.find(',', pos);
+             temp = std::stof(line.substr(pos, counter)) ;
+            vector<float> new_vec;
+            new_vec.push_back(temp);
             feature_table.push_back(new_vec);
             line.erase(pos, counter + 1);
         }
+        vector<float> new_vec;
+        new_vec.push_back(temp);
+        feature_table.push_back(new_vec);
+
+
     } else {
         for (auto &i: feature_table) {
-            int counter = line.find(',', pos);
-            string temp = line.substr(pos, counter);
-            i.push_back(std::stod(temp));
+            int counter = (int)line.find(',', pos);
+            temp = std::stof(line.substr(pos, counter));
+            i.push_back(temp);
             line.erase(pos, counter + 1);
         }
     }
@@ -84,7 +90,7 @@ void TimeSeries::addValuesFromLine(string line) {
  * This function return
  * @return const vector<vector<string> >
  */
-vector<vector<double> > TimeSeries::getFeatureTable() const {
+vector<vector<float> > TimeSeries::getFeatureTable() const {
     return feature_table;
 }
 
@@ -93,5 +99,5 @@ vector<std::string> TimeSeries::getNameTable() const {
 }
 
 int TimeSeries::size() const {
-    return feature_table.size();
+    return (int)feature_table.size();
 }
