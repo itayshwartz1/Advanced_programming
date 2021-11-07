@@ -3,8 +3,10 @@
 //
 
 #include "TimeSeries.h"
+#include "SimpleAnomalyDetector.h"
 
 int main(int argc, char **argv) {
-    TimeSeries *timeSeries = new TimeSeries(argv[1]);
-
+    auto *timeSeries = new TimeSeries(argv[1]);
+    auto *detector = new SimpleAnomalyDetector();
+    detector->learnNormal(*timeSeries);
 }

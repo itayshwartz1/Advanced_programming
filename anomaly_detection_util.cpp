@@ -31,7 +31,7 @@ float expectancy(float *x, int size) {
     for (int i = 0; i < size; i++) {
         sum += x[i];
     }
-    return (float) sum / (float) size;
+    return (double) sum / (double) size;
 }
 
 /**
@@ -52,7 +52,9 @@ float var(float *x, int size) {
         sum += (x[i] * x[i]);
     }
     float avg = sum / (float) size;
-    return avg - powf(expectancy(x, size), 2);
+    float temp = powf(expectancy(x, size), 2);
+    float res = avg - (double)temp;
+    return res;
 }
 
 /**
@@ -77,7 +79,7 @@ float cov(float *x, float *y, int size) {
     float result = expectancy(ptr_xy, size);
     delete[]xy;
     //Return the covariance.
-    return result - expectancy(x, size) * expectancy(y, size);
+    return (double)result - (double)expectancy(x, size) * expectancy(y, size);
 }
 
 /**
@@ -93,7 +95,10 @@ float pearson(float *x, float *y, int size) {
     if (x == nullptr || y == nullptr) {
         throw "nullptr Exception";
     }
-    return cov(x, y, size) / (sqrtf(var(x, size)) * sqrtf(var(y, size)));
+    float cov_res, pow_res;
+    cov_res = cov(x, y, size);
+    pow_res = (sqrtf(var(x, size)) * sqrtf(var(y, size)));
+    return  (cov_res/pow_res );
 }
 
 /**

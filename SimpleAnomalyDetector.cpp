@@ -3,15 +3,17 @@
 //
 #include "SimpleAnomalyDetector.h"
 
-//SimpleAnomalyDetector::SimpleAnomalyDetector() : TimeSeriesAnomalyDetector() {}
+SimpleAnomalyDetector::SimpleAnomalyDetector() : TimeSeriesAnomalyDetector() {
+    normal_model = {};
+}
 
-//SimpleAnomalyDetector::~SimpleAnomalyDetector() {
-//}
+SimpleAnomalyDetector::~SimpleAnomalyDetector() {
+}
 
 
-//vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
-//
-//}
+vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
+    return vector<AnomalyReport>();
+}
 
 std::vector<correlatedFeatures> SimpleAnomalyDetector::getNormalModel() {
     return normal_model;
@@ -35,15 +37,15 @@ std::vector<Point *> SimpleAnomalyDetector::corrlatedCreatPoints(std::vector<flo
          * need to delete the new!
          *****************/
         auto *p = new Point(x[i], y[i]);
-        v_point[i] = p;
+        v_point.push_back(p);
     }
     return v_point;
 }
 
 void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     const vector<vector<float>> feature_table = ts.getFeatureTable();
-    float p;
-    float m;
+    float p=0;
+    float m=0;
     int c;
     vector<float> v1, v2;
     for (int i = 0; i < feature_table.size(); i++) {

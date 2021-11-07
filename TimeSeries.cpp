@@ -54,7 +54,7 @@ void TimeSeries::createNamesTable(string line) {
         line.erase(0, pos + delimiter.length());
     }
     //we add one more vector because the last token finished without ',' - so we need to add it anyway.
-    feature_names.push_back(token);
+    feature_names.push_back(line);
 }
 
 /**
