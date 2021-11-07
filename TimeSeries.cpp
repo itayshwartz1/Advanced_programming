@@ -63,9 +63,9 @@ void TimeSeries::createValuesTable(string line) {
     int pos = 0;
     float temp;
     if (feature_names.empty()) {
-        while ((pos = (int)line.find(',')) != string::npos) {
-            int counter = (int)line.find(',', pos);
-             temp = std::stof(line.substr(pos, counter)) ;
+        while ((pos = (int) line.find(',')) != string::npos) {
+            int counter = (int) line.find(',', pos);
+            temp = std::stof(line.substr(pos, counter));
             vector<float> new_vec;
             new_vec.push_back(temp);
             feature_table.push_back(new_vec);
@@ -78,7 +78,7 @@ void TimeSeries::createValuesTable(string line) {
 
     } else {
         for (auto &i: feature_table) {
-            int counter = (int)line.find(',', pos);
+            int counter = (int) line.find(',', pos);
             temp = std::stof(line.substr(pos, counter));
             i.push_back(temp);
             line.erase(pos, counter + 1);
@@ -99,5 +99,5 @@ vector<std::string> TimeSeries::getNameTable() const {
 }
 
 int TimeSeries::size() const {
-    return (int)feature_table.size();
+    return (int) feature_table.size();
 }
