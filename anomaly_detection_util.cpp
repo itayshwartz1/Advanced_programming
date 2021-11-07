@@ -102,11 +102,11 @@ float pearson(float *x, float *y, int size) {
  * @param points, size
  * @return Line.
  */
-Line linear_reg(Point* points, int size) {
+Line linear_reg(Point **points, int size) {
     if (size <= 0) {
         throw "size = 0 ";
     }
-    if (points== nullptr) {
+    if (points == nullptr) {
         throw "nullptr Exception";
     }
     float *xArr = new float[size];
@@ -143,11 +143,11 @@ float dev(Point p, Line l) {
  * @param p, points, size
  * @return float
  */
-float dev(Point p, vector<Point> points, int size) {
+float dev(Point p, Point **points, int size) {
     if (size <= 0) {
         throw "size = 0 ";
     }
-    if (0 == points.size()) {
+    if (points == nullptr) {
         throw "empty points Exception";
     }
     return dev(p, linear_reg(points, size));
