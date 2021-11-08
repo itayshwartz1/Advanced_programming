@@ -2,6 +2,7 @@
 // Created by yhood on 31/10/2021.
 //
 #include "SimpleAnomalyDetector.h"
+#include "AnomalyDetector.h"
 
 SimpleAnomalyDetector::SimpleAnomalyDetector() : TimeSeriesAnomalyDetector() {
     normal_model = {};
@@ -12,7 +13,26 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector() {
 
 
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
-    return vector<AnomalyReport>();
+    std::vector<Point *> v_points;
+    std::vector<float> feature1_x;
+    std::vector<float> feature2_y;
+    std::vector<AnomalyReport> report_vec = {};
+    for (auto &i: normal_model) {
+        //define vector X and vector Y to make corrlated point to test later.
+        feature1_x = ts.feature_map.at(i.feature1);
+        feature2_y = ts.feature_map.at(i.feature2);
+        v_points = corrlatedCreatPoints(feature1_x, feature2_y);
+        // run over the points and check if there is an exception.
+        for (int j = 0; j < v_points.size(); j++) {
+            if (i.threshold < dev(*v_points[j], i.lin_reg)) {
+                std::string description;
+                description.append("Exception had been found out between" + i.feature1 + "," + i.feature2);
+                AnomalyReport report = {description, j + 1};
+                report_vec.push_back(report);
+            }
+        }
+    }
+    return report_vec;
 }
 
 std::vector<correlatedFeatures> SimpleAnomalyDetector::getNormalModel() {
@@ -44,8 +64,8 @@ std::vector<Point *> SimpleAnomalyDetector::corrlatedCreatPoints(std::vector<flo
 
 void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     const vector<vector<float>> feature_table = ts.getFeatureTable();
-    float p=0;
-    float m=0;
+    float p = 0;
+    float m = 0;
     int c;
     vector<float> v1, v2;
     for (int i = 0; i < feature_table.size(); i++) {
@@ -57,7 +77,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             float temp = pearson((v1.data()), (v2.data()),
                                  (signed) v1.size());
             p = fabsf(temp);
-            if ((p) > m) {
+            if (p > m && !std::isinf(p)) {
                 m = p;
                 c = j;
             }
@@ -79,6 +99,7 @@ float SimpleAnomalyDetector::detectThreshold(const vector<Point *> &points, Line
     for (auto i: points) {
         max_threshold = std::max(max_threshold, dev(*i, line));
     }
-    return max_threshold;
+    // we return the threshold*1.1 as recommended.
+    return (float) 1.1 * max_threshold;
 }
 

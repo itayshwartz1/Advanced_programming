@@ -1,6 +1,7 @@
 
 #ifndef DEV_ANOMALYDETECTOR_H
 #define DEV_ANOMALYDETECTOR_H
+
 #include "TimeSeries.h"
 #include <vector>
 #include <string>

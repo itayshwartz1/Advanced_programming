@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <cmath>
 #include "anomaly_detection_util.h"
@@ -31,7 +32,7 @@ float expectancy(float *x, int size) {
     for (int i = 0; i < size; i++) {
         sum += x[i];
     }
-    return (double) sum / (double) size;
+    return sum / (float) size;
 }
 
 /**
@@ -52,8 +53,9 @@ float var(float *x, int size) {
         sum += (x[i] * x[i]);
     }
     float avg = sum / (float) size;
-    float temp = powf(expectancy(x, size), 2);
-    float res = avg - (double)temp;
+    float exp = expectancy(x, size);
+    double temp = pow(exp, 2);
+    float res = avg - temp;
     return res;
 }
 
@@ -76,10 +78,10 @@ float cov(float *x, float *y, int size) {
         xy[i] = x[i] * y[i];
     }
     float *ptr_xy = xy;
-    float result = expectancy(ptr_xy, size);
+    double result = expectancy(ptr_xy, size);
     delete[]xy;
     //Return the covariance.
-    return (double)result - (double)expectancy(x, size) * expectancy(y, size);
+    return (float)(result - expectancy(x, size) * expectancy(y, size));
 }
 
 /**
@@ -95,10 +97,10 @@ float pearson(float *x, float *y, int size) {
     if (x == nullptr || y == nullptr) {
         throw "nullptr Exception";
     }
-    float cov_res, pow_res;
+    double cov_res, sqrt_res;
     cov_res = cov(x, y, size);
-    pow_res = (sqrtf(var(x, size)) * sqrtf(var(y, size)));
-    return  (cov_res/pow_res );
+    sqrt_res = sqrt((double)var(x, size)) *sqrt((double)var(y, size));
+    return (float)(cov_res / sqrt_res);
 }
 
 /**

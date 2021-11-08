@@ -14,9 +14,10 @@ using std::getline;
  * This is the main builder of TimeSeries. is creat a new table from csv file.
  * @param fileName
  */
-TimeSeries::TimeSeries(char *fileName) {
+TimeSeries::TimeSeries(const char *fileName) {
     feature_table = {};
     feature_names = {};
+    feature_map = {};
     std::fstream myfile;
     //open file and read mode.
     myfile.open(fileName, std::ios::in);
@@ -36,6 +37,8 @@ TimeSeries::TimeSeries(char *fileName) {
         }
     }
     myfile.close();
+    //initializing mapping between feature name and the vector of values.
+    initializeMap();
 }
 
 /**
@@ -68,7 +71,7 @@ void TimeSeries::createValuesTable(string line) {
     float temp;
     if (feature_table.empty()) {
         while ((pos = (int) line.find(',')) != string::npos) {
-            temp = std::stof(line.substr(counter , pos));
+            temp = std::stof(line.substr(counter, pos));
             vector<float> new_vec;
             new_vec.push_back(temp);
             feature_table.push_back(new_vec);
@@ -103,4 +106,13 @@ vector<std::string> TimeSeries::getNameTable() const {
 
 int TimeSeries::size() const {
     return (int) feature_table.size();
+}
+
+/**
+ * Initializing the map, which maps between feature name and its vector of values.
+ */
+void TimeSeries::initializeMap() {
+    for (int i = 0; i < feature_names.size(); i++) {
+        feature_map.insert({feature_names[i], feature_table[i]});
+    }
 }

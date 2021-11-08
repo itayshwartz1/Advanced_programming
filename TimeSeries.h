@@ -11,13 +11,18 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
-class TimeSeries{
+class TimeSeries {
 
-public:TimeSeries(char *fileName);
+public:
+    TimeSeries(const char *fileName);
 
     std::vector<std::vector<float> > feature_table;
     std::vector<std::string> feature_names;
+    std::map<std::string, std::vector<float>> feature_map;
+
+    void initializeMap();
 
     void createNamesTable(std::string basicString);
 
@@ -25,7 +30,7 @@ public:TimeSeries(char *fileName);
 
     int size() const;
 
-    std::vector<std::vector< float>> getFeatureTable() const;
+    std::vector<std::vector<float>> getFeatureTable() const;
 
     std::vector<std::string> getNameTable() const;
 };
