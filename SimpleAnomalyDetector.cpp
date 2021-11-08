@@ -77,7 +77,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             float temp = pearson((v1.data()), (v2.data()),
                                  (signed) v1.size());
             p = fabsf(temp);
-            if (p > m && !std::isinf(p)) {
+            if (p > m) {
                 m = p;
                 c = j;
             }

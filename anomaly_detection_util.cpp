@@ -4,15 +4,6 @@
 #include "anomaly_detection_util.h"
 #include <exception>
 
-/**
- * TODO
- * 1. check if size == 0.
- * 2. check in pearson, what happen if one of the sigma == 0. (line 71)
- * 3. check in linear reg, what happen if var == 0. (line 91).
- * 4, check in linear reg, what happen if the line is vertical.
- * 5.
- */
-
 
 /**
  * calculate life expectancy
@@ -32,6 +23,9 @@ float expectancy(float *x, int size) {
     for (int i = 0; i < size; i++) {
         sum += x[i];
     }
+    //preventing deviding by 0.
+    if (size == 0)
+        return 0;
     return sum / (float) size;
 }
 
@@ -54,7 +48,7 @@ float var(float *x, int size) {
     }
     float avg = sum / (float) size;
     float exp = expectancy(x, size);
-    double temp = pow(exp, 2);
+    float temp = powf(exp, 2);
     float res = avg - temp;
     return res;
 }
@@ -81,7 +75,7 @@ float cov(float *x, float *y, int size) {
     double result = expectancy(ptr_xy, size);
     delete[]xy;
     //Return the covariance.
-    return (float)(result - expectancy(x, size) * expectancy(y, size));
+    return (float) (result - expectancy(x, size) * expectancy(y, size));
 }
 
 /**
@@ -99,8 +93,11 @@ float pearson(float *x, float *y, int size) {
     }
     double cov_res, sqrt_res;
     cov_res = cov(x, y, size);
-    sqrt_res = sqrt((double)var(x, size)) *sqrt((double)var(y, size));
-    return (float)(cov_res / sqrt_res);
+    sqrt_res = sqrt((double) var(x, size)) * sqrt((double) var(y, size));
+    //avoiding deviding by zero.
+    if (sqrt_res == 0)
+        return 0;
+    return (float) (cov_res / sqrt_res);
 }
 
 /**
