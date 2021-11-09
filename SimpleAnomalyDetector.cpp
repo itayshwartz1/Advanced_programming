@@ -77,7 +77,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             float temp = pearson((v1.data()), (v2.data()),
                                  (signed) v1.size());
             p = fabsf(temp);
-            if (p > m) {
+            if (p > m && p > 0.9) {
                 m = p;
                 c = j;
             }
@@ -100,6 +100,6 @@ float SimpleAnomalyDetector::detectThreshold(const vector<Point *> &points, Line
         max_threshold = std::max(max_threshold, dev(*i, line));
     }
     // we return the threshold*1.1 as recommended.
-    return (float) 1.1 * max_threshold;
+    return (float) 1.2 * max_threshold;
 }
 

@@ -121,7 +121,7 @@ Line linear_reg(Point **points, int size) {
     }
     float covariance = cov(xArr, yArr, size);
     float variance = var(xArr, size);
-    if ((covariance || variance) == 0) {
+    if (covariance ==0|| variance == 0) {
         return {0, var(yArr, size)};
     }
     float a = covariance / variance;
