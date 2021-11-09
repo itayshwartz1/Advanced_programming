@@ -33,9 +33,9 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
                 AnomalyReport report = {description, j + 1};
                 report_vec.push_back(report);
             }
-            for (auto k: v_points) {
-                delete[]k;
-            }
+        }
+        for (auto &k: v_points) {
+            delete k;
         }
     }
     return report_vec;
@@ -97,8 +97,8 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             Line line = linear_reg(v_point.data(), (signed) v_point.size());
             float thershold = detectThreshold(v_point, line);
             normal_model.push_back(initializeCor(feature1, feature2, corlation, line, thershold));
-            for (auto k: v_point) {
-                delete[]k;
+            for (auto &k: v_point) {
+                delete k;
             }
         }
     }

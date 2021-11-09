@@ -9,6 +9,7 @@
 #include "anomaly_detection_util.h"
 #include "timeseries.h"
 #include <vector>
+#include <algorithm>
 
 using std::vector;
 using std::string;
@@ -38,7 +39,7 @@ public:
 
     virtual vector<correlatedFeatures> getNormalModel();
 
-    static float detectThreshold(const vector<Point *>& points, Line line);
+    static float detectThreshold(const vector<Point *> &points, Line line);
 };
 
 #endif //DEV_SIMPLEANOMALYDETECTOR_H
