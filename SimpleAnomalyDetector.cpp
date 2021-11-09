@@ -9,10 +9,13 @@ SimpleAnomalyDetector::SimpleAnomalyDetector() : TimeSeriesAnomalyDetector() {
 }
 
 SimpleAnomalyDetector::~SimpleAnomalyDetector() {
+    for (auto &i: normal_model) {
+
+    }
 }
 
 
-vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
+vector<AnomalyReport> SimpleAnomalyDetector::detect(const timeseries &ts) {
     std::vector<Point *> v_points;
     std::vector<float> feature1_x;
     std::vector<float> feature2_y;
@@ -26,9 +29,12 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
         for (int j = 0; j < v_points.size(); j++) {
             if (i.threshold < dev(*v_points[j], i.lin_reg)) {
                 std::string description;
-                description.append("Exception had been found out between" + i.feature1 + "," + i.feature2);
+                description.append(i.feature1 + "-" + i.feature2);
                 AnomalyReport report = {description, j + 1};
                 report_vec.push_back(report);
+            }
+            for (auto k: v_points) {
+                delete[]k;
             }
         }
     }
@@ -62,7 +68,7 @@ std::vector<Point *> SimpleAnomalyDetector::corrlatedCreatPoints(std::vector<flo
     return v_point;
 }
 
-void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
+void SimpleAnomalyDetector::learnNormal(const timeseries &ts) {
     const vector<vector<float>> feature_table = ts.getFeatureTable();
     float p = 0;
     float m = 0;
@@ -77,7 +83,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             float temp = pearson((v1.data()), (v2.data()),
                                  (signed) v1.size());
             p = fabsf(temp);
-            if (p > m && p > 0.9) {
+            if (p > m && p > 0.9f) {
                 m = p;
                 c = j;
             }
@@ -86,6 +92,7 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             float corlation = m;
             std::string feature1 = ts.feature_names[i];
             std::string feature2 = ts.feature_names[c];
+            v2 = feature_table[c];
             std::vector<Point *> v_point = corrlatedCreatPoints(v1, v2);
             Line line = linear_reg(v_point.data(), (signed) v_point.size());
             float thershold = detectThreshold(v_point, line);

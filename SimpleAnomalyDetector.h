@@ -7,7 +7,7 @@
 
 #include "AnomalyDetector.h"
 #include "anomaly_detection_util.h"
-#include "TimeSeries.h"
+#include "timeseries.h"
 #include <vector>
 
 using std::vector;
@@ -32,9 +32,9 @@ public:
 
     ~SimpleAnomalyDetector() override;
 
-    virtual void learnNormal(const TimeSeries &ts) override;
+    virtual void learnNormal(const timeseries &ts) override;
 
-    virtual vector<AnomalyReport> detect(const TimeSeries &ts) override;
+    virtual vector<AnomalyReport> detect(const timeseries &ts) override;
 
     virtual vector<correlatedFeatures> getNormalModel();
 

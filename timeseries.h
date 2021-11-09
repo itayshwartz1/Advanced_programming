@@ -13,10 +13,10 @@
 #include <vector>
 #include <map>
 
-class TimeSeries {
+class timeseries {
 
 public:
-    TimeSeries(const char *fileName);
+    timeseries(const char *fileName);
 
     std::vector<std::vector<float> > feature_table;
     std::vector<std::string> feature_names;

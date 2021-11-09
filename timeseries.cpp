@@ -2,7 +2,7 @@
 // Created by itay2 on 31/10/2021.
 //
 
-#include "TimeSeries.h"
+#include "timeseries.h"
 #include <iostream>
 #include <string>
 
@@ -11,10 +11,10 @@ using std::vector;
 using std::getline;
 
 /**
- * This is the main builder of TimeSeries. is creat a new table from csv file.
+ * This is the main builder of timeseries. is creat a new table from csv file.
  * @param fileName
  */
-TimeSeries::TimeSeries(const char *fileName) {
+timeseries::timeseries(const char *fileName) {
     feature_table = {};
     feature_names = {};
     feature_map = {};
@@ -45,7 +45,7 @@ TimeSeries::TimeSeries(const char *fileName) {
  * This function creat new vectors to the table. the first data in the vectors is the given data.
  * @param line
  */
-void TimeSeries::createNamesTable(string line) {
+void timeseries::createNamesTable(string line) {
     size_t pos = 0;
     string token;
     string delimiter = ",";
@@ -64,7 +64,7 @@ void TimeSeries::createNamesTable(string line) {
  * This function add values to the existing table by the order they been given.
  * @param line
  */
-void TimeSeries::createValuesTable(string line) {
+void timeseries::createValuesTable(string line) {
 
     int pos = 0;
     int counter = 0;
@@ -96,22 +96,22 @@ void TimeSeries::createValuesTable(string line) {
  * This function return
  * @return const vector<vector<string> >
  */
-vector<vector<float> > TimeSeries::getFeatureTable() const {
+vector<vector<float> > timeseries::getFeatureTable() const {
     return feature_table;
 }
 
-vector<std::string> TimeSeries::getNameTable() const {
+vector<std::string> timeseries::getNameTable() const {
     return feature_names;
 }
 
-int TimeSeries::size() const {
+int timeseries::size() const {
     return (int) feature_table.size();
 }
 
 /**
  * Initializing the map, which maps between feature name and its vector of values.
  */
-void TimeSeries::initializeMap() {
+void timeseries::initializeMap() {
     for (int i = 0; i < feature_names.size(); i++) {
         feature_map.insert({feature_names[i], feature_table[i]});
     }

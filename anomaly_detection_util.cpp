@@ -128,7 +128,7 @@ Line linear_reg(Point **points, int size) {
     float b = expectancy(yArr, size) - a * expectancy(xArr, size);
     delete[]xArr;
     delete[]yArr;
-    return {a, b};
+   return {a, b};
 }
 
 /**
