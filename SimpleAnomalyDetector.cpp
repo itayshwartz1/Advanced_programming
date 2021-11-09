@@ -15,7 +15,7 @@ SimpleAnomalyDetector::~SimpleAnomalyDetector() {
 }
 
 
-vector<AnomalyReport> SimpleAnomalyDetector::detect(const timeseries &ts) {
+vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
     std::vector<Point *> v_points;
     std::vector<float> feature1_x;
     std::vector<float> feature2_y;
@@ -68,7 +68,7 @@ std::vector<Point *> SimpleAnomalyDetector::corrlatedCreatPoints(std::vector<flo
     return v_point;
 }
 
-void SimpleAnomalyDetector::learnNormal(const timeseries &ts) {
+void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
     const vector<vector<float>> feature_table = ts.getFeatureTable();
     float p = 0;
     float m = 0;

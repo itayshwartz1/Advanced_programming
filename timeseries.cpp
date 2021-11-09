@@ -11,10 +11,10 @@ using std::vector;
 using std::getline;
 
 /**
- * This is the main builder of timeseries. is creat a new table from csv file.
+ * This is the main builder of TimeSeries. is creat a new table from csv file.
  * @param fileName
  */
-timeseries::timeseries(const char *fileName) {
+TimeSeries::TimeSeries(const char *fileName) {
     feature_table = {};
     feature_names = {};
     feature_map = {};
@@ -45,7 +45,7 @@ timeseries::timeseries(const char *fileName) {
  * This function creat new vectors to the table. the first data in the vectors is the given data.
  * @param line
  */
-void timeseries::createNamesTable(string line) {
+void TimeSeries::createNamesTable(string line) {
     size_t pos = 0;
     string token;
     string delimiter = ",";
@@ -64,7 +64,7 @@ void timeseries::createNamesTable(string line) {
  * This function add values to the existing table by the order they been given.
  * @param line
  */
-void timeseries::createValuesTable(string line) {
+void TimeSeries::createValuesTable(string line) {
 
     int pos = 0;
     int counter = 0;
@@ -96,22 +96,22 @@ void timeseries::createValuesTable(string line) {
  * This function return
  * @return const vector<vector<string> >
  */
-vector<vector<float> > timeseries::getFeatureTable() const {
+vector<vector<float> > TimeSeries::getFeatureTable() const {
     return feature_table;
 }
 
-vector<std::string> timeseries::getNameTable() const {
+vector<std::string> TimeSeries::getNameTable() const {
     return feature_names;
 }
 
-int timeseries::size() const {
+int TimeSeries::size() const {
     return (int) feature_table.size();
 }
 
 /**
  * Initializing the map, which maps between feature name and its vector of values.
  */
-void timeseries::initializeMap() {
+void TimeSeries::initializeMap() {
     for (int i = 0; i < feature_names.size(); i++) {
         feature_map.insert({feature_names[i], feature_table[i]});
     }

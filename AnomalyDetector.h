@@ -20,9 +20,9 @@ public:
 
 class TimeSeriesAnomalyDetector {
 public:
-    virtual void learnNormal(const timeseries &ts) = 0;
+    virtual void learnNormal(const TimeSeries &ts) = 0;
 
-    virtual vector<AnomalyReport> detect(const timeseries &ts) = 0;
+    virtual vector<AnomalyReport> detect(const TimeSeries &ts) = 0;
 
     virtual ~TimeSeriesAnomalyDetector() {}
 };
