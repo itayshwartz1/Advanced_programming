@@ -1,7 +1,7 @@
-///////
-// Created by itay2 on 31/10/2021.
-//
-
+/**
+ * Name: Roei Gehassi and Itay Shwartz
+ * ID: 208854754 and 318528171
+ */
 #include "timeseries.h"
 #include <iostream>
 #include <string>

@@ -1,7 +1,7 @@
-//
-// Created by yhood on 31/10/2021.
-//
-
+/**
+ * Name: Roei Gehassi and Itay Shwartz
+ * ID: 208854754 and 318528171
+ */
 #ifndef DEV_SIMPLEANOMALYDETECTOR_H
 #define DEV_SIMPLEANOMALYDETECTOR_H
 

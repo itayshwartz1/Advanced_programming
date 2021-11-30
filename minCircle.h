@@ -1,4 +1,7 @@
-
+/**
+ * Name: Roei Gehassi and Itay Shwartz
+ * ID: 208854754 and 318528171
+ */
 #ifndef MINCIRCLE_H_
 #define MINCIRCLE_H_
 

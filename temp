@@ -1,0 +1,9 @@
+Circle findMinCircle(Point **points, size_t size) {
+    //initialize from points' array to points' vectors
+    std::vector<Point> p_vector;
+    p_vector.reserve(size);
+    for (int i = 0; i < size; i++) {
+        p_vector.push_back(*points[i]);
+    }
+    return minimum_enclosing_circle(p_vector);
+}
