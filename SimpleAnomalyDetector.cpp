@@ -9,11 +9,8 @@ SimpleAnomalyDetector::SimpleAnomalyDetector() : TimeSeriesAnomalyDetector() {
     normal_model = {};
 }
 
-SimpleAnomalyDetector::~SimpleAnomalyDetector() {
-    for (auto &i: normal_model) {
 
-    }
-}
+SimpleAnomalyDetector::~SimpleAnomalyDetector() = default;
 
 
 vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
@@ -28,7 +25,7 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
         v_points = corrlatedCreatPoints(feature1_x, feature2_y);
         // run over the points and check if there is an exception.
         for (int j = 0; j < v_points.size(); j++) {
-            if (i.threshold < dev(*v_points[j], i.lin_reg)) {
+            if (detectReportTerms(i.threshold,*v_points[j],i)) {
                 std::string description;
                 description.append(i.feature1 + "-" + i.feature2);
                 AnomalyReport report = {description, j + 1};
@@ -44,11 +41,6 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
 
 std::vector<correlatedFeatures> SimpleAnomalyDetector::getNormalModel() {
     return normal_model;
-}
-
-correlatedFeatures initializeCor(string &feature1, string &feature2, float corrlated, Line line_reg, float threshold) {
-    correlatedFeatures cor = {feature1, feature2, corrlated, line_reg, threshold};
-    return cor;
 }
 
 /**
@@ -84,26 +76,21 @@ void SimpleAnomalyDetector::learnNormal(const TimeSeries &ts) {
             float temp = pearson((v1.data()), (v2.data()),
                                  (signed) v1.size());
             p = fabsf(temp);
-            if (p > m && p > 0.9f) {
+            if (p > m && isInTerms(p)) {
                 m = p;
                 c = j;
             }
         }
+        //initialize struct
         if (c != (-1)) {
-            float corlation = m;
             std::string feature1 = ts.feature_names[i];
             std::string feature2 = ts.feature_names[c];
             v2 = feature_table[c];
-            std::vector<Point *> v_point = corrlatedCreatPoints(v1, v2);
-            Line line = linear_reg(v_point.data(), (signed) v_point.size());
-            float thershold = detectThreshold(v_point, line);
-            normal_model.push_back(initializeCor(feature1, feature2, corlation, line, thershold));
-            for (auto &k: v_point) {
-                delete k;
-            }
+            initCorrelatedFeatures(v1, v2, feature1, feature2, m);
         }
     }
 }
+
 
 float SimpleAnomalyDetector::detectThreshold(const vector<Point *> &points, Line line) {
     float max_threshold = 0;
@@ -113,4 +100,40 @@ float SimpleAnomalyDetector::detectThreshold(const vector<Point *> &points, Line
     // we return the threshold*1.1 as recommended.
     return (float) 1.2 * max_threshold;
 }
+
+bool SimpleAnomalyDetector::isInTerms(float p) {
+    if (p >= init_threshold)
+        return true;
+    return false;
+}
+
+void
+SimpleAnomalyDetector::initCorrelatedFeatures(const vector<float> &v1, const vector<float> &v2, const string &feature1,
+                                              const string &feature2, float corr) {
+    std::vector<Point *> v_point = corrlatedCreatPoints(v1, v2);
+    Line line = linear_reg(v_point.data(), (signed) v_point.size());
+    float thershold = detectThreshold(v_point, line);
+    normal_model.push_back(initializeCor(feature1, feature2, corr, line,
+                                         thershold, {{0, 0}, 0}));
+    for (auto &k: v_point) {
+        delete k;
+    }
+
+}
+
+correlatedFeatures
+SimpleAnomalyDetector::initializeCor(const string &feature1, const string &feature2, float corrlated, Line line_reg,
+                                     float threshold, Circle c) {
+    correlatedFeatures cor = {feature1, feature2, corrlated, line_reg, threshold,
+                              {{0, 0}, 0}};
+    return cor;
+}
+
+bool SimpleAnomalyDetector::detectReportTerms(float threshold, const Point &p, const correlatedFeatures &c) {
+    if (threshold < dev(p, c.lin_reg))
+        return true;
+    return false;
+}
+
+
 

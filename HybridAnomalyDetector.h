@@ -5,11 +5,30 @@
 
 #include "SimpleAnomalyDetector.h"
 #include "minCircle.h"
+#include <array>
 
-class HybridAnomalyDetector:public SimpleAnomalyDetector {
+
+using std::vector;
+
+class HybridAnomalyDetector : public SimpleAnomalyDetector {
 public:
-	HybridAnomalyDetector();
-	virtual ~HybridAnomalyDetector();
+    float min_threshold = 0.5;
+
+    HybridAnomalyDetector();
+
+    virtual ~HybridAnomalyDetector();
+
+    static Point **hybridCreatPoints(vector<float> x, vector<float> y);
+
+    virtual void initCorrelatedFeatures(const vector<float> &v1, const vector<float> &v2,
+                                        const string &feature1, const string &feature2, float corr) override;
+
+    virtual bool detectReportTerms(float threshold, const Point &p, const correlatedFeatures &c) override;
+    virtual correlatedFeatures initializeCor(const string &feature1, const string &feature2, float corrlated,
+                                            Line line_reg, float threshold,Circle c) override;
+
+    bool isInTerms(float p) override;
+
 
 };
 
