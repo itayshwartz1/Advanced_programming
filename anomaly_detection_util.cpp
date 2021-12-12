@@ -73,13 +73,20 @@ float cov(float *x, float *y, int size) {
     //This loop creat a new array from x and y, means xy...
     auto *xy = new float[size];
     for (int i = 0; i < size; i++) {
-        xy[i] = x[i] * y[i];
+        float a = x[i];
+        float b = y[i];
+        float ab = a*b;
+        xy[i] =  ab;
     }
     float *ptr_xy = xy;
     double result = expectancy(ptr_xy, size);
     delete[]xy;
     //Return the covariance.
-    return (float) (result - expectancy(x, size) * expectancy(y, size));
+    float a = expectancy(x, size);
+    float b = expectancy(y, size);
+    float ab = a*b;
+    float return_resurl = result - ab;
+    return return_resurl;
 }
 
 /**
@@ -123,6 +130,7 @@ Line linear_reg(Point **points, int size) {
         xArr[i] = points[i]->x;
         yArr[i] = points[i]->y;
     }
+
     float covariance = cov(xArr, yArr, size);
     float variance = var(xArr, size);
     if (covariance ==0|| variance == 0) {
