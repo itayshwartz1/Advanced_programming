@@ -36,15 +36,32 @@ public:
 
 // you may edit this class
 class Command{
+    string description;
     Client* client;
 	DefaultIO* dio;
 public:
 	Command(DefaultIO* dio):dio(dio){}
 	virtual void execute()=0;
 	virtual ~Command(){}
+    void setDescription(string desc){
+        description=desc;
+    }
+    void setClient(Client* client){
+        client=client;
+    }
+    string getDescription(){
+        return description;
+    }
+    Client* getClient(){
+        return client;
+    }
 };
 
 // implement here your command classes
+class UploadCommand:public Command{
+public:
+
+};
 
 
 
