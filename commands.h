@@ -133,6 +133,29 @@ public:
 };
 
 // implement here your command classes
+class UploadAndAnalyze : public Command {
+public:
+    UploadAndAnalyze(DefaultIO* dio,Client* client): Command(dio,"UploadAndAnalyze command",client){}
+    DefaultIO* dio=getDefaultIO();
+    virtual void execute() override{
+
+
+    }
+    vector<pair<int,int>> compressReport(vector<AnomalyReport> ar){
+        vector<pair<int,int>> ret ={};
+        if(ar.size()==0){
+           return ret;
+        }
+        AnomalyReport start=ar[0];
+        for(int i=1;i<ar.size();i++){
+            if(ar[i-1].description==ar[i].description&&ar[i-1].timeStep+1==ar[i].timeStep){
+                continue;
+            }
+            ret.emplace_back(start.timeStep,ar[i-1].timeStep);
+            start=ar[i];
+        }
+    }
+}
 class UploadCommand : public Command {
 public:
     UploadCommand(DefaultIO* dio,Client* client): Command(dio,"Upload command",client){}
