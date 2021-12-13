@@ -17,9 +17,6 @@ void CLI::start() {
         command_map["0"].execute();
         choice = dio->read();
         command_map[choice].execute();
-
-
-
     }
 }
 
