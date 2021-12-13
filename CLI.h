@@ -13,6 +13,7 @@ class CLI {
 	// you can add data member.
     map<string,Command> command_map={};
 public:
+    void initializeCommandMap();
 	CLI(DefaultIO* dio);
 	void start();
 	virtual ~CLI();

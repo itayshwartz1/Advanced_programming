@@ -1,5 +1,13 @@
 #include "CLI.h"
-
+/**
+ * TODO:
+ * Create Command map.
+ * Initialize Client
+ * Check if we send Client by &.
+ * run maintrain.
+ *
+ *
+ */
 CLI::CLI(DefaultIO *dio) {
 }
 
@@ -13,6 +21,7 @@ void CLI::start() {
     /**
      * Need to create commands_array
      */
+
     while (true) {
         command_map["0"].execute();
         choice = dio->read();
@@ -22,4 +31,8 @@ void CLI::start() {
 
 
 CLI::~CLI() {
+}
+void CLI::initializeCommandMap(Client& client) {
+    command_map.insert(make_pair("0",new MenuCommand(dio,client)))
+
 }

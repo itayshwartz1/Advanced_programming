@@ -19,6 +19,7 @@ public:
 
     AnomalyReport(string description, long timeStep) :
             description(description), timeStep(timeStep) {}
+
 };
 
 class TimeSeriesAnomalyDetector {
