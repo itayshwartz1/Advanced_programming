@@ -21,13 +21,22 @@ public:
 	virtual ~DefaultIO(){}
 
 	// you may add additional methods here
+
 };
 
 // you may add here helper classes
-
+class Client {
+    string train_path;
+    string test_path;
+    double correlation;
+    int test_line_size;
+public:
+    Client();
+};
 
 // you may edit this class
 class Command{
+    Client* client;
 	DefaultIO* dio;
 public:
 	Command(DefaultIO* dio):dio(dio){}

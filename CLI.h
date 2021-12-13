@@ -10,7 +10,8 @@ using namespace std;
 
 class CLI {
 	DefaultIO* dio;
-	// you can add data members
+	// you can add data member.
+    map<string,Command> command_map={};
 public:
 	CLI(DefaultIO* dio);
 	void start();
