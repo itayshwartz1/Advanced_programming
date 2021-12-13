@@ -12,16 +12,19 @@
 
 using namespace std;
 
-class DefaultIO{
+class DefaultIO {
 public:
-	virtual string read()=0;
-	virtual void write(string text)=0;
-	virtual void write(float f)=0;
-	virtual void read(float* f)=0;
-	virtual ~DefaultIO(){}
+    virtual string read() = 0;
 
-	// you may add additional methods here
-    void local_download(string path){}
+    virtual void write(string text) = 0;
+
+    virtual void write(float f) = 0;
+
+    virtual void read(float *f) = 0;
+
+    virtual ~DefaultIO() {}
+
+    // you may add additional methods here
 
 };
 
@@ -51,28 +54,76 @@ class Client {
     vector<AnomalyReport> anomaly_report;
 public:
     Client();
+
+    void setTrainPath(string path) {
+        train_path = path;
+    }
+
+    string getTrainPath() {
+        return train_path;
+    }
+
+    void setTestPath(string path) {
+        test_path = path;
+    }
+
+    string getTestPath() {
+        return test_path;
+    }
+
+    void setCorrelation(double corr) {
+        correlation = corr;
+    }
+
+    double getCorrelation() {
+        return correlation;
+    }
+
+    void setTestLineSize(int size) {
+        test_line_size = size;
+    }
+
+    int getTestLineSize() {
+        return test_line_size;
+    }
+
+    vector<AnomalyReport> getAnomalyReport() {
+        return anomaly_report;
+    }
+
+    void setAnomalyReport(vector<AnomalyReport> ar) {
+        anomaly_report = ar;
+    }
 };
 
 // you may edit this class
-class Command{
+class Command {
     string description;
-    Client* client;
-	DefaultIO* dio;
+    Client *client;
+    DefaultIO *dio;
 public:
-	Command(DefaultIO* dio):dio(dio),description(nullptr){}
-    Command(DefaultIO* dio,string description,Client* client):dio(dio),description(description),client(client){}
-	virtual void execute()=0;
-	virtual ~Command(){}
-    void setDescription(string desc){
-        description=desc;
+    Command(DefaultIO *dio) : dio(dio) {}
+
+    Command(DefaultIO *dio, string description, Client *client) : dio(dio), description(description), client(client) {}
+
+
+    virtual void execute() = 0;
+
+    virtual ~Command() {}
+
+    void setDescription(string desc) {
+        description = desc;
     }
-    void setClient(Client* client){
+
+    void setClient(Client *client) {
         client = client;
     }
-    string getDescription(){
+
+    string getDescription() {
         return description;
     }
-    Client* getClient(){
+
+    Client *getClient() {
         return client;
     }
 
@@ -85,7 +136,7 @@ public:
 class UploadCommand : public Command {
 public:
     UploadCommand(DefaultIO* dio,Client* client): Command(dio,"Upload command",client){}
-    DefaultIO* dio=getDio();
+    DefaultIO* dio=getDefaultIO();
     virtual void execute() override{
         dio->write("Please upload your local train CSV file.");
         getCSV("anomalyTest.csv");
