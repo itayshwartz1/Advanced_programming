@@ -11,9 +11,10 @@ using namespace std;
 class CLI {
 	DefaultIO* dio;
 	// you can add data member.
-    map<string,Command> command_map={};
+    map<string,Command*> command_map={};
 public:
-    void initializeCommandMap();
+    void deleteCommandMap();
+    void initializeCommandMap(Client* client);
 	CLI(DefaultIO* dio);
 	void start();
 	virtual ~CLI();

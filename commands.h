@@ -153,6 +153,7 @@ public:
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
+
         vector<pair<int, int>> compressed_report = compressReport(getClient().getAnomalyReport());
         vector<pair<int, int>> real_report = initRealReport();
         int FP = 0, TP = 0;
@@ -204,6 +205,7 @@ public:
     }
 
     vector<pair<int, int>> compressReport(const vector<AnomalyReport> &ar) {
+
         vector<pair<int, int>> ret = {};
         if (ar.size() == 0) {
             return ret;
