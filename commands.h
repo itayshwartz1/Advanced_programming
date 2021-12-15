@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include <fstream>
+#include <utility>
 #include <vector>
 #include "HybridAnomalyDetector.h"
 
@@ -33,7 +34,7 @@ public:
 class StandardIo : public DefaultIO {
     virtual string read() override {
         string result;
-        cin >> result;
+        getline(cin, result);
         return result;
     }
 
@@ -59,7 +60,7 @@ class Client {
     int csv_lines;
     vector<AnomalyReport> anomaly_report;
 public:
-    Client();
+    Client() {}
 
     void setTrainPath(string path) {
         train_path = path;
@@ -68,8 +69,9 @@ public:
     int getCsvLines() {
         return csv_lines;
     }
-    void setCsvLines(int n){
-        csv_lines=n;
+
+    void setCsvLines(int n) {
+        csv_lines = n;
     }
 
     string getTrainPath() {
@@ -100,12 +102,12 @@ public:
         return test_line_size;
     }
 
-    vector<AnomalyReport> getAnomalyReport() {
+    const vector<AnomalyReport> &getAnomalyReport() {
         return anomaly_report;
     }
 
-    void setAnomalyReport(vector<AnomalyReport> ar) {
-        anomaly_report = ar;
+    void setAnomalyReport(vector<AnomalyReport> &ar) {
+        // anomaly_report = ar;
     }
 };
 
@@ -117,14 +119,15 @@ class Command {
 public:
     Command(DefaultIO *dio) : dio(dio) {}
 
-    Command(DefaultIO *dio, string description, Client *client) : dio(dio), description(description), client(client) {}
+    Command(DefaultIO *dio, string description, Client *client) : dio(dio), description(std::move(description)),
+                                                                  client(client) {}
 
 
     virtual void execute() = 0;
 
     virtual ~Command() {}
 
-    void setDescription(string desc) {
+    void setDescription(string &desc) {
         description = desc;
     }
 
@@ -153,7 +156,6 @@ public:
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
-
         vector<pair<int, int>> compressed_report = compressReport(getClient().getAnomalyReport());
         vector<pair<int, int>> real_report = initRealReport();
         int FP = 0, TP = 0;
@@ -189,7 +191,7 @@ public:
         return false;
     }
 
-    vector<pair<int, int>> initRealReport() {
+    vector<pair<int, int>> initRealReport() const {
         vector<pair<int, int>> result = {};
         string line = dio->read();
         //splitting
@@ -204,10 +206,10 @@ public:
         return result;
     }
 
-    vector<pair<int, int>> compressReport(const vector<AnomalyReport> &ar) {
+    static vector<pair<int, int>> compressReport(const vector<AnomalyReport> &ar) {
 
         vector<pair<int, int>> ret = {};
-        if (ar.size() == 0) {
+        if (ar.empty()) {
             return ret;
         }
         const AnomalyReport *start = &ar[0];
@@ -221,11 +223,14 @@ public:
         return ret;
     }
 };
-class MenuCommand:public Command{
+
+class MenuCommand : public Command {
 public:
     MenuCommand(DefaultIO *dio, Client *client) : Command(dio, "Menu Command", client) {}
+
     DefaultIO *dio = getDefaultIO();
-    virtual void execute() override{
+
+    virtual void execute() override {
         dio->write("Welcome to the Anomaly Detection Server.\n"
                    "Please choose an option:\n"
                    "1. upload a time series csv file\n"
@@ -233,9 +238,10 @@ public:
                    "3. detect anomalies\n"
                    "4. display results\n"
                    "5. upload anomalies and analyze results\n"
-                   "6. exit");
+                   "6. exit\n");
     }
 };
+
 class UploadCommand : public Command {
 public:
     UploadCommand(DefaultIO *dio, Client *client) : Command(dio, "Upload command", client) {}
@@ -243,33 +249,41 @@ public:
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
-        dio->write("Please upload your local train CSV file.");
-        getCSV("anomalyTest.csv", true);
-        dio->write("Please upload your local test CSV file.");
-        getCSV("anomalyTrain.csv", false);
+        dio->write("Please upload your local train CSV file.\n");
+        string test_path="C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTest.csv";
+        string train_path="C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTrain.csv";
+        getClient().setTestPath(test_path);
+        getClient().setTrainPath(train_path);
+        getCSV(test_path, true);
+        dio->write("Please upload your local test CSV file.\n");
+        getCSV(train_path, false);
 
     }
+
     /**
      * 
      * @param path the path of the file
      * @param update_csv_len if we add anomalyTest we want to count number of lines
      */
-    void getCSV(string path,bool update_csv_len) {
+    void getCSV(string path, bool update_csv_len) {
         fstream myfile;
-        int counter=0;
-        myfile.open(path, ios::in);
+        int counter = 0;
+        myfile.open(path, ios::out);
+        if (!myfile) {
+            cout << "file didnt create";
+        }
         string data;
         data = dio->read();
         while (data != "done") {
             counter++;
-            myfile << data;
+            myfile << data + "\n";
             data = dio->read();
         }
         myfile.close();
-        if(update_csv_len){
+        if (update_csv_len) {
             getClient().setCsvLines(counter);
         }
-        dio->write("Upload complete.");
+        dio->write("Upload complete.\n");
     }
 };
 
@@ -315,7 +329,7 @@ public:
         vector<AnomalyReport> report = ad.detect(ts2);
 
         getClient().setAnomalyReport(report);
-        getDefaultIO()->write("anomaly detection complete.");
+        getDefaultIO()->write("anomaly detection complete.\n");
     }
 };
 
@@ -326,12 +340,13 @@ public:
     void execute() override {
         float corr;
         while (true) {
-            getDefaultIO()->write("The current correlation threshold is " + to_string(getClient().getCorrelation()));
+            getDefaultIO()->write("The current correlation threshold is " +
+                                  to_string(getClient().getCorrelation()) + "\n");
             corr = std::stof((getDefaultIO()->read()));
             if (corr <= 1 && corr >= 0) {
                 break;
             }
-            getDefaultIO()->write("please choose a value between 0 and 1.");
+            getDefaultIO()->write("please choose a value between 0 and 1.\n");
 
         }
         getClient().setCorrelation(corr);

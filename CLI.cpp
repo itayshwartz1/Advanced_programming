@@ -9,6 +9,7 @@ CLI::CLI(DefaultIO *dio) {
 
 void CLI::start() {
     string choice;
+    dio= new StandardIo();
     /**
    * DO NOT FORGET TO DELETE ALL NEW COMMANDS
    */
@@ -17,6 +18,7 @@ void CLI::start() {
       * we will modify client object for each client.
       */
     auto *client = new Client();
+    client->setCorrelation(0.9);
     //initialize only once and change it.
     initializeCommandMap(client);
     //accept
