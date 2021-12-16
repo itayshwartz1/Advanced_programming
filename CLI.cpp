@@ -4,12 +4,12 @@
  *
  *
  */
-CLI::CLI(DefaultIO *dio) {
+CLI::CLI(DefaultIO *dio):dio(dio) {
 }
 
 void CLI::start() {
     string choice;
-    dio= new StandardIo();
+
     /**
    * DO NOT FORGET TO DELETE ALL NEW COMMANDS
    */

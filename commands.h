@@ -58,7 +58,7 @@ class Client {
     double correlation;
     int test_line_size;
     int csv_lines;
-    vector<AnomalyReport> anomaly_report;
+    vector<AnomalyReport> *anomaly_report;
 public:
     Client() {}
 
@@ -102,12 +102,12 @@ public:
         return test_line_size;
     }
 
-    const vector<AnomalyReport> &getAnomalyReport() {
+    const vector<AnomalyReport> *getAnomalyReport() {
         return anomaly_report;
     }
 
-    void setAnomalyReport(vector<AnomalyReport> &ar) {
-        // anomaly_report = ar;
+    void setAnomalyReport(vector<AnomalyReport> *ar) {
+         anomaly_report = ar;
     }
 };
 
@@ -156,7 +156,7 @@ public:
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
-        vector<pair<int, int>> compressed_report = compressReport(getClient().getAnomalyReport());
+        vector<pair<int, int>> compressed_report = compressReport(*getClient().getAnomalyReport());
         vector<pair<int, int>> real_report = initRealReport();
         int FP = 0, TP = 0;
         if ((int) compressed_report.size() == 0) {
@@ -179,8 +179,8 @@ public:
         }
         string TP_result = to_string((double) ((double) TP / (double) real_report.size()));
         string FP_result = to_string((double) FP / (double) getClient().getCsvLines());
-        dio->write("True Positive Rate: " + TP_result);
-        dio->write("False Positive Rate: " + FP_result);
+        dio->write("True Positive Rate: \n" + TP_result);
+        dio->write("False Positive Rate: \n" + FP_result);
 
     }
 
@@ -306,7 +306,7 @@ public:
     DisplayResults(DefaultIO *dio, Client *client) : Command(dio, "DisplayResults", client) {}
 
     void execute() override {
-        vector<AnomalyReport> ar = getClient().getAnomalyReport();
+        vector<AnomalyReport> ar = *getClient().getAnomalyReport();
         for (auto &element: ar) {
             getDefaultIO()->write(to_string(element.timeStep) + "\t" + element.description);
         }
@@ -328,7 +328,7 @@ public:
         TimeSeries ts2(test_path.c_str());
         vector<AnomalyReport> report = ad.detect(ts2);
 
-        getClient().setAnomalyReport(report);
+        getClient().setAnomalyReport(&report);
         getDefaultIO()->write("anomaly detection complete.\n");
     }
 };
