@@ -160,8 +160,7 @@ public:
         }
         int i = 0;
         int j = 0;
-        while ((real_report.size() != 0 && compressed_report.size() != 0) &&
-               (i < compressed_report.size() || j < real_report.size())) {
+        while (i < compressed_report.size() && j < real_report.size()) {
             if (isContained(compressed_report[i], real_report[j])) {
                 TP++;
                 if (compressed_report[i].second >= real_report[j].second)
@@ -169,7 +168,14 @@ public:
                 else i++;
             } else {
                 FP++;
+                if (compressed_report[i].second >= real_report[j].second)
+                    j++;
+                else i++;
             }
+        }
+
+        if (j < i) {
+            FP += compressed_report.size() - i;
         }
         string TP_result = to_string((float) ((float) TP / (float) real_report.size()));
         string FP_result = to_string((float) FP / (float) getClient().getCsvLines());
@@ -249,10 +255,10 @@ public:
 
     virtual void execute() override {
         dio->write("Please upload your local train CSV file.\n");
-        string test_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTest.csv";
-        string train_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTrain.csv";
-        getClient().setTestPath(test_path);
-        getClient().setTrainPath(train_path);
+        string test_path = "D:\\Advanced_programming\\server\\anomalyTest.csv";
+        string train_path = "D:\\Advanced_programming\\server\\anomalyTrain.csv";
+        getClient().setTestPath(train_path);
+        getClient().setTrainPath(test_path);
         getCSV(test_path, true);
         dio->write("Please upload your local test CSV file.\n");
         getCSV(train_path, false);
