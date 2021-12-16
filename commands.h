@@ -154,10 +154,10 @@ public:
         vector<pair<int, int>> real_report = initRealReport();
         float FP = 0, TP = 0;
         if ((int) compressed_report.size() == 0) {
-            FP = (int) real_report.size();
+            FP = (float) real_report.size();
         }
         if ((int) real_report.size() == 0) {
-            FP = (int) compressed_report.size();
+            FP = (float) compressed_report.size();
         }
         int i = 0;
         int j = 0;
@@ -178,11 +178,27 @@ public:
         if (i < j) {
             FP += compressed_report.size() - i;
         }
-        string TP_result = to_string( ( TP / (float) real_report.size()));
-        string FP_result = to_string( FP / (float) getClient().getCsvLines());
+        string FP_result;
+        string TP_result;
+        FP_result = toStringCase(FP, (float) real_report.size());
+        TP_result = toStringCase(TP, (float) compressed_report.size());
         dio->write("True Positive Rate: " + TP_result + "\n");
         dio->write("False Positive Rate: " + FP_result + "\n");
+    }
 
+    string toStringCase(float result, float size) {
+        float temp = (result / size);
+        string str_temp= to_string(temp);
+        string str_dig;
+        int indx = (int)str_temp.find('.');
+        str_dig=str_temp.substr(0,indx);
+        string after_dig = str_temp.substr(indx, indx+3);
+        string str_result=str_dig +after_dig;
+        if(str_result.at(indx+1)=='0')
+            return str_result.substr(0,indx);
+        if(str_result.at(indx+2)=='0')
+            return str_result.substr(0,indx+2);
+        return str_result;
     }
 
     bool isContained(pair<int, int> a, pair<int, int> b) {
@@ -257,13 +273,13 @@ public:
 
     virtual void execute() override {
         dio->write("Please upload your local train CSV file.\n");
-        string test_path = "D:\\Advanced_programming\\server\\anomalyTest.csv";
-        string train_path = "D:\\Advanced_programming\\server\\anomalyTrain.csv";
-        getClient().setTestPath(train_path);
-        getClient().setTrainPath(test_path);
-        getCSV(test_path, true);
+        string test_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTest.csv";
+        string train_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTrain.csv";
+        getClient().setTrainPath(train_path);
+        getClient().setTestPath(test_path);
+        getCSV(train_path, true);
         dio->write("Please upload your local test CSV file.\n");
-        getCSV(train_path, false);
+        getCSV(test_path, false);
 
     }
 
@@ -339,7 +355,6 @@ public:
         string test_path = getClient().getTestPath();
         TimeSeries ts2(test_path.c_str());
         vector<AnomalyReport> report = ad.detect(ts2);
-
         getClient().setAnomalyReport(report);
         getDefaultIO()->write("anomaly detection complete.\n");
     }
