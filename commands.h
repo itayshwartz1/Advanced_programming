@@ -143,6 +143,7 @@ public:
 class UploadAndAnalyze : public Command {
 public:
     UploadAndAnalyze(DefaultIO *dio, Client *client) : Command(dio, "UploadAndAnalyze command", client) {}
+
     virtual ~UploadAndAnalyze() {}
 
     DefaultIO *dio = getDefaultIO();
@@ -170,10 +171,10 @@ public:
                 FP++;
             }
         }
-        string TP_result = to_string((double) ((double) TP / (double) real_report.size()));
-        string FP_result = to_string((double) FP / (double) getClient().getCsvLines());
-        dio->write("True Positive Rate: \n" + TP_result);
-        dio->write("False Positive Rate: \n" + FP_result);
+        string TP_result = to_string((float) ((float) TP / (float) real_report.size()));
+        string FP_result = to_string((float) FP / (float) getClient().getCsvLines());
+        dio->write("True Positive Rate: " + TP_result + "\n");
+        dio->write("False Positive Rate: " + FP_result + "\n");
 
     }
 
@@ -221,24 +222,27 @@ public:
 class MenuCommand : public Command {
 public:
     MenuCommand(DefaultIO *dio, Client *client) : Command(dio, "Menu Command", client) {}
+
     virtual ~MenuCommand() {}
+
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
         dio->write("Welcome to the Anomaly Detection Server.\n"
                    "Please choose an option:\n"
-                   "1. upload a time series csv file\n"
-                   "2. algorithm settings\n"
-                   "3. detect anomalies\n"
-                   "4. display results\n"
-                   "5. upload anomalies and analyze results\n"
-                   "6. exit\n");
+                   "1.upload a time series csv file\n"
+                   "2.algorithm settings\n"
+                   "3.detect anomalies\n"
+                   "4.display results\n"
+                   "5.upload anomalies and analyze results\n"
+                   "6.exit\n");
     }
 };
 
 class UploadCommand : public Command {
 public:
     UploadCommand(DefaultIO *dio, Client *client) : Command(dio, "Upload command", client) {}
+
     virtual ~UploadCommand() {}
 
     DefaultIO *dio = getDefaultIO();
@@ -285,6 +289,7 @@ public:
 class Exit : public Command {
 public:
     Exit(DefaultIO *dio, Client *client) : Command(dio, "Exit", client) {}
+
     virtual ~Exit() {}
 
     void execute() override {
@@ -299,6 +304,7 @@ public:
 class DisplayResults : public Command {
 public:
     DisplayResults(DefaultIO *dio, Client *client) : Command(dio, "DisplayResults", client) {}
+
     virtual ~DisplayResults() {}
 
     void execute() override {
@@ -306,13 +312,14 @@ public:
         for (auto &element: ar) {
             getDefaultIO()->write(to_string(element.timeStep) + "\t" + element.description);
         }
-        getDefaultIO()->write("Done.");
+        getDefaultIO()->write("Done.\n");
     }
 };
 
 class DetectAnomaly : public Command {
 public:
     DetectAnomaly(DefaultIO *dio, Client *client) : Command(dio, "DetectAnomaly", client) {}
+
     virtual ~DetectAnomaly() {}
 
     void execute() override {
@@ -333,13 +340,17 @@ public:
 class AlgorithmSetting : public Command {
 public:
     AlgorithmSetting(DefaultIO *dio, Client *client) : Command(dio, "AlgorithmSetting", client) {}
+
     virtual ~AlgorithmSetting() {}
 
     void execute() override {
         float corr;
         while (true) {
+            float corrolation = getClient().getCorrelation();
             getDefaultIO()->write("The current correlation threshold is " +
-                                  to_string(getClient().getCorrelation()) + "\n");
+                                  to_string(corrolation).substr
+                                          (0, to_string(corrolation).find(".") + 2) + "\n");
+            getDefaultIO()->write("Type a new threshold\n");
             corr = std::stof((getDefaultIO()->read()));
             if (corr <= 1 && corr >= 0) {
                 break;

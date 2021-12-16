@@ -18,8 +18,6 @@ vector<AnomalyReport> SimpleAnomalyDetector::detect(const TimeSeries &ts) {
     std::vector<float> feature1_x;
     std::vector<float> feature2_y;
     std::vector<AnomalyReport> report_vec = {};
-    cout << ("size of report:" + to_string(report_vec.size())+"\n");
-    cout<<("Come on\n");
     for (auto &i: normal_model) {
         //define vector X and vector Y to make corrlated point to test later.
         feature1_x = ts.feature_map.at(i.feature1);
