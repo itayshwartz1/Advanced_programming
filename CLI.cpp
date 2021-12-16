@@ -22,13 +22,13 @@ void CLI::start() {
     //initialize only once and change it.
     initializeCommandMap(client);
     //accept
-    while (true) {
+  //  while (true) {
         do {
             command_map["0"]->execute();
             choice = dio->read();
             command_map[choice]->execute();
         } while (choice != "6");
-    }
+    //}
     //removing all allocations.
     deleteCommandMap();
 }
@@ -49,7 +49,7 @@ void CLI::initializeCommandMap(Client *client) {
 
 void CLI::deleteCommandMap() {
     for (auto &key: command_map) {
-        delete[]key.second;
+        delete key.second;
     }
 }
 

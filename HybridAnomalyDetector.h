@@ -15,6 +15,8 @@ public:
     float min_threshold = 0.5;
 
     HybridAnomalyDetector();
+    HybridAnomalyDetector(float init_threshold):SimpleAnomalyDetector(init_threshold){};
+
 
     virtual ~HybridAnomalyDetector();
 

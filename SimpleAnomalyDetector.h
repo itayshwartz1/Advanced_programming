@@ -32,6 +32,8 @@ public:
 
     SimpleAnomalyDetector();
 
+    SimpleAnomalyDetector(float init_threshold) : init_threshold(init_threshold){};
+
     virtual vector<Point *> corrlatedCreatPoints(vector<float>, vector<float>);
 
 
@@ -42,6 +44,7 @@ public:
     virtual vector<AnomalyReport> detect(const TimeSeries &ts) override;
 
     virtual vector<correlatedFeatures> getNormalModel();
+
     /**
      * check terms of threshold
      * @param p point
@@ -63,8 +66,9 @@ public:
     static float detectThreshold(const vector<Point *> &points, Line line);
 
     virtual correlatedFeatures initializeCor(const string &feature1, const string &feature2, float corrlated,
-                                            Line line_reg, float threshold,Circle c);
-    virtual bool detectReportTerms(float threshold,const Point& p,const correlatedFeatures &c);
+                                             Line line_reg, float threshold, Circle c);
+
+    virtual bool detectReportTerms(float threshold, const Point &p, const correlatedFeatures &c);
 
 
     float init_threshold = 0.9;

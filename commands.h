@@ -55,10 +55,9 @@ class StandardIo : public DefaultIO {
 class Client {
     string train_path;
     string test_path;
-    double correlation;
-    int test_line_size;
+    float correlation;
     int csv_lines;
-    vector<AnomalyReport> *anomaly_report;
+    vector<AnomalyReport> anomaly_report;
 public:
     Client() {}
 
@@ -94,20 +93,12 @@ public:
         return correlation;
     }
 
-    void setTestLineSize(int size) {
-        test_line_size = size;
-    }
-
-    int getTestLineSize() {
-        return test_line_size;
-    }
-
-    const vector<AnomalyReport> *getAnomalyReport() {
+    const vector<AnomalyReport> getAnomalyReport() {
         return anomaly_report;
     }
 
-    void setAnomalyReport(vector<AnomalyReport> *ar) {
-         anomaly_report = ar;
+    void setAnomalyReport(vector<AnomalyReport> &ar) {
+        anomaly_report = ar;
     }
 };
 
@@ -152,11 +143,12 @@ public:
 class UploadAndAnalyze : public Command {
 public:
     UploadAndAnalyze(DefaultIO *dio, Client *client) : Command(dio, "UploadAndAnalyze command", client) {}
+    virtual ~UploadAndAnalyze() {}
 
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
-        vector<pair<int, int>> compressed_report = compressReport(*getClient().getAnomalyReport());
+        vector<pair<int, int>> compressed_report = compressReport(getClient().getAnomalyReport());
         vector<pair<int, int>> real_report = initRealReport();
         int FP = 0, TP = 0;
         if ((int) compressed_report.size() == 0) {
@@ -167,7 +159,8 @@ public:
         }
         int i = 0;
         int j = 0;
-        while (i < compressed_report.size() || j < real_report.size()) {
+        while ((real_report.size() != 0 && compressed_report.size() != 0) &&
+               (i < compressed_report.size() || j < real_report.size())) {
             if (isContained(compressed_report[i], real_report[j])) {
                 TP++;
                 if (compressed_report[i].second >= real_report[j].second)
@@ -195,10 +188,11 @@ public:
         vector<pair<int, int>> result = {};
         string line = dio->read();
         //splitting
-        int indx = line.find(',');
+        int indx;
         int start, end;
         while (line != "done") {
-            start = stoi(line.substr(0, indx - 1));
+            indx = line.find(',');
+            start = stoi(line.substr(0, indx));
             end = stoi(line.substr(indx + 1, line.size() - 1));
             result.emplace_back(start, end);
             line = dio->read();
@@ -227,7 +221,7 @@ public:
 class MenuCommand : public Command {
 public:
     MenuCommand(DefaultIO *dio, Client *client) : Command(dio, "Menu Command", client) {}
-
+    virtual ~MenuCommand() {}
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
@@ -245,13 +239,14 @@ public:
 class UploadCommand : public Command {
 public:
     UploadCommand(DefaultIO *dio, Client *client) : Command(dio, "Upload command", client) {}
+    virtual ~UploadCommand() {}
 
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
         dio->write("Please upload your local train CSV file.\n");
-        string test_path="C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTest.csv";
-        string train_path="C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTrain.csv";
+        string test_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTest.csv";
+        string train_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\server\\anomalyTrain.csv";
         getClient().setTestPath(test_path);
         getClient().setTrainPath(train_path);
         getCSV(test_path, true);
@@ -290,6 +285,7 @@ public:
 class Exit : public Command {
 public:
     Exit(DefaultIO *dio, Client *client) : Command(dio, "Exit", client) {}
+    virtual ~Exit() {}
 
     void execute() override {
         string testPath = getClient().getTestPath();
@@ -297,16 +293,16 @@ public:
         remove(testPath.c_str());
         remove(trainPath.c_str());
         getClient().setCorrelation(0);
-        getClient().setTestLineSize(0);
     }
 };
 
 class DisplayResults : public Command {
 public:
     DisplayResults(DefaultIO *dio, Client *client) : Command(dio, "DisplayResults", client) {}
+    virtual ~DisplayResults() {}
 
     void execute() override {
-        vector<AnomalyReport> ar = *getClient().getAnomalyReport();
+        vector<AnomalyReport> ar = getClient().getAnomalyReport();
         for (auto &element: ar) {
             getDefaultIO()->write(to_string(element.timeStep) + "\t" + element.description);
         }
@@ -317,18 +313,19 @@ public:
 class DetectAnomaly : public Command {
 public:
     DetectAnomaly(DefaultIO *dio, Client *client) : Command(dio, "DetectAnomaly", client) {}
+    virtual ~DetectAnomaly() {}
 
     void execute() override {
         string train_path = getClient().getTrainPath();
         TimeSeries ts(train_path.c_str());
-        HybridAnomalyDetector ad;
+        HybridAnomalyDetector ad(getClient().getCorrelation());
         ad.learnNormal(ts);
 
         string test_path = getClient().getTestPath();
         TimeSeries ts2(test_path.c_str());
         vector<AnomalyReport> report = ad.detect(ts2);
 
-        getClient().setAnomalyReport(&report);
+        getClient().setAnomalyReport(report);
         getDefaultIO()->write("anomaly detection complete.\n");
     }
 };
@@ -336,6 +333,7 @@ public:
 class AlgorithmSetting : public Command {
 public:
     AlgorithmSetting(DefaultIO *dio, Client *client) : Command(dio, "AlgorithmSetting", client) {}
+    virtual ~AlgorithmSetting() {}
 
     void execute() override {
         float corr;
