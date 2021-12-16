@@ -153,35 +153,53 @@ public:
         vector<pair<int, int>> compressed_report = compressReport(getClient().getAnomalyReport());
         vector<pair<int, int>> real_report = initRealReport();
         float FP = 0, TP = 0;
-        if ((int) compressed_report.size() == 0) {
-            FP = (float) real_report.size();
-        }
-        if ((int) real_report.size() == 0) {
-            FP = (float) compressed_report.size();
-        }
-        int i = 0;
-        int j = 0;
-        while (i < compressed_report.size() && j < real_report.size()) {
-            if (isContained(compressed_report[i], real_report[j])) {
-                TP++;
-                if (compressed_report[i].second >= real_report[j].second)
-                    j++;
-                else i++;
-            } else {
-                FP++;
-                if (compressed_report[i].second >= real_report[j].second)
-                    j++;
-                else i++;
-            }
+
+        if (compressed_report.size() == 0) {
+            FP = real_report.size();
         }
 
-        if (i < j) {
-            FP += compressed_report.size() - i;
+        for (int i = 0; i < real_report.size(); i++) {
+            for (int j = 0; j < compressed_report.size(); j++) {
+                if (isContained(real_report[i], compressed_report[j])) {
+                    TP++;
+                    break;
+                }
+                if (j == compressed_report.size() - 1) {
+                    FP++;
+                }
+            }
         }
-        string FP_result;
-        string TP_result;
-        FP_result = toStringCase(FP, (float) real_report.size());
-        TP_result = toStringCase(TP, (float) compressed_report.size());
+        if (compressed_report.size() > real_report.size()) {
+            FP+=compressed_report.size() - real_report.size();
+        }
+
+//        if ((int) compressed_report.size() == 0) {
+//            FP = (int) real_report.size();
+//        }
+//        if ((int) real_report.size() == 0) {
+//            FP = (int) compressed_report.size();
+//        }
+//        int i = 0;
+//        int j = 0;
+//        while (i < compressed_report.size() && j < real_report.size()) {
+//            if (isContained(compressed_report[i], real_report[j])) {
+//                TP++;
+//                if (compressed_report[i].second >= real_report[j].second)
+//                    j++;
+//                else i++;
+//            } else {
+//                FP++;
+//                if (compressed_report[i].second >= real_report[j].second)
+//                    j++;
+//                else i++;
+//            }
+//        }
+//
+//        if (i < j) {
+//            FP += compressed_report.size() - i;
+//        }
+        string TP_result = to_string(TP / (float) real_report.size());
+        string FP_result = to_string(FP / ((float) getClient().getCsvLines() - 1));
         dio->write("True Positive Rate: " + TP_result + "\n");
         dio->write("False Positive Rate: " + FP_result + "\n");
     }
@@ -202,7 +220,7 @@ public:
     }
 
     bool isContained(pair<int, int> a, pair<int, int> b) {
-        if ((a.first >= b.first && a.first <= b.second) || (b.first <= a.second && b.first >= a.first)) {
+        if ((a.first > b.first && a.first < b.second) || (b.first < a.second && b.first > a.first)) {
             return true;
         }
         return false;
@@ -273,8 +291,8 @@ public:
 
     virtual void execute() override {
         dio->write("Please upload your local train CSV file.\n");
-        string test_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTest.csv";
-        string train_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTrain.csv";
+        string test_path = "D:\\\\Advanced_programming\\\\server\\\\anomalyTest.csv\"";
+        string train_path = "D:\\Advanced_programming\\server\\anomalyTrain.csv";
         getClient().setTrainPath(train_path);
         getClient().setTestPath(test_path);
         getCSV(train_path, true);
@@ -355,6 +373,7 @@ public:
         string test_path = getClient().getTestPath();
         TimeSeries ts2(test_path.c_str());
         vector<AnomalyReport> report = ad.detect(ts2);
+
         getClient().setAnomalyReport(report);
         getDefaultIO()->write("anomaly detection complete.\n");
     }
