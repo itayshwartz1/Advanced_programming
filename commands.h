@@ -149,9 +149,10 @@ public:
     DefaultIO *dio = getDefaultIO();
 
     virtual void execute() override {
+        dio->write("Please upload your local anomalies file.\n");
         vector<pair<int, int>> compressed_report = compressReport(getClient().getAnomalyReport());
         vector<pair<int, int>> real_report = initRealReport();
-        int FP = 0, TP = 0;
+        float FP = 0, TP = 0;
         if ((int) compressed_report.size() == 0) {
             FP = (int) real_report.size();
         }
@@ -174,11 +175,11 @@ public:
             }
         }
 
-        if (j < i) {
+        if (i < j) {
             FP += compressed_report.size() - i;
         }
-        string TP_result = to_string((float) ((float) TP / (float) real_report.size()));
-        string FP_result = to_string((float) FP / (float) getClient().getCsvLines());
+        string TP_result = to_string( ( TP / (float) real_report.size()));
+        string FP_result = to_string( FP / (float) getClient().getCsvLines());
         dio->write("True Positive Rate: " + TP_result + "\n");
         dio->write("False Positive Rate: " + FP_result + "\n");
 
@@ -204,6 +205,7 @@ public:
             result.emplace_back(start, end);
             line = dio->read();
         }
+        dio->write("Upload complete.\n");
         return result;
     }
 
@@ -316,7 +318,7 @@ public:
     void execute() override {
         vector<AnomalyReport> ar = getClient().getAnomalyReport();
         for (auto &element: ar) {
-            getDefaultIO()->write(to_string(element.timeStep) + "\t" + element.description);
+            getDefaultIO()->write(to_string(element.timeStep) + "\t" + element.description + "\n");
         }
         getDefaultIO()->write("Done.\n");
     }
