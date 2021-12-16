@@ -198,8 +198,8 @@ public:
 //        if (i < j) {
 //            FP += compressed_report.size() - i;
 //        }
-        string TP_result = to_string(TP / (float) real_report.size());
-        string FP_result = to_string(FP / ((float) getClient().getCsvLines() - 1));
+        string TP_result= toStringCase(TP,(float)real_report.size());
+        string FP_result= toStringCase(FP,(float)getClient().getCsvLines()-1);
         dio->write("True Positive Rate: " + TP_result + "\n");
         dio->write("False Positive Rate: " + FP_result + "\n");
     }
@@ -291,14 +291,13 @@ public:
 
     virtual void execute() override {
         dio->write("Please upload your local train CSV file.\n");
-        string test_path = "D:\\\\Advanced_programming\\\\server\\\\anomalyTest.csv\"";
-        string train_path = "D:\\Advanced_programming\\server\\anomalyTrain.csv";
+        string test_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTest.csv";
+        string train_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTrain.csv";
         getClient().setTrainPath(train_path);
         getClient().setTestPath(test_path);
         getCSV(train_path, true);
         dio->write("Please upload your local test CSV file.\n");
         getCSV(test_path, false);
-
     }
 
     /**
