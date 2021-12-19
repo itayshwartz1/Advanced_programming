@@ -52,54 +52,12 @@ class StandardIo : public DefaultIO {
     }
 };
 
-class Client {
+struct Client {
     string train_path;
     string test_path;
     float correlation;
     int csv_lines;
     vector<AnomalyReport> anomaly_report;
-public:
-    Client() {}
-
-    void setTrainPath(string path) {
-        train_path = path;
-    }
-
-    int getCsvLines() {
-        return csv_lines;
-    }
-
-    void setCsvLines(int n) {
-        csv_lines = n;
-    }
-
-    string getTrainPath() {
-        return train_path;
-    }
-
-    void setTestPath(string path) {
-        test_path = path;
-    }
-
-    string getTestPath() {
-        return test_path;
-    }
-
-    void setCorrelation(double corr) {
-        correlation = corr;
-    }
-
-    double getCorrelation() {
-        return correlation;
-    }
-
-    const vector<AnomalyReport> getAnomalyReport() {
-        return anomaly_report;
-    }
-
-    void setAnomalyReport(vector<AnomalyReport> &ar) {
-        anomaly_report = ar;
-    }
 };
 
 // you may edit this class
@@ -150,62 +108,26 @@ public:
 
     virtual void execute() override {
         dio->write("Please upload your local anomalies file.\n");
-        vector<pair<int, int>> compressed_report = compressReport(getClient().getAnomalyReport());
-        vector<pair<int, int>> real_report = initRealReport();
+        vector<pair<int, int>> compressed_report = compressReport(getClient().anomaly_report);
+        vector<pair<int, int>> real_report = initRealReport(&getClient());
         float FP = 0, TP = 0;
-        int real_report_time = 0;
-
-        if (compressed_report.size() == 0) {
-            FP = real_report.size();
-        }
-
-        for (int i = 0; i < real_report.size(); i++) {
-            for (int j = 0; j < compressed_report.size(); j++) {
-                if (isContained(real_report[i], compressed_report[j])) {
+        for (auto &comp_res: compressed_report) {
+            for(auto&real_rep:real_report){
+                if(comp_res.first>=real_rep.first&&comp_res.first<real_rep.second){
                     TP++;
                     break;
                 }
-                if (j == compressed_report.size() - 1) {
-                    FP++;
-                }
+                FP++;
             }
         }
-
-        if (compressed_report.size() > real_report.size()) {
-            FP += compressed_report.size() - real_report.size();
-        }
-
-//        if ((int) compressed_report.size() == 0) {
-//            FP = (int) real_report.size();
-//        }
-//        if ((int) real_report.size() == 0) {
-//            FP = (int) compressed_report.size();
-//        }
-//        int i = 0;
-//        int j = 0;
-//        while (i < compressed_report.size() && j < real_report.size()) {
-//            if (isContained(compressed_report[i], real_report[j])) {
-//                TP++;
-//                if (compressed_report[i].second >= real_report[j].second)
-//                    j++;
-//                else i++;
-//            } else {
-//                FP++;
-//                if (compressed_report[i].second >= real_report[j].second)
-//                    j++;
-//                else i++;
-//            }
-//        }
-//
-//        if (i < j) {
-//            FP += compressed_report.size() - i;
-//        }
         string TP_result = toStringCase(TP, (float) real_report.size());
-        string FP_result = toStringCase(FP, (float) getClient().getCsvLines() - 1);
+        string FP_result = toStringCase(FP, (float) getClient().csv_lines - 1);
         dio->write("True Positive Rate: " + TP_result + "\n");
         dio->write("False Positive Rate: " + FP_result + "\n");
     }
-
+/**
+ * NEED TO DEBUG AND CHECK IT!
+ */
     string toStringCase(float result, float size) {
         float temp = (result / size);
         string str_temp = to_string(temp);
@@ -214,10 +136,12 @@ public:
         str_dig = str_temp.substr(0, indx);
         string after_dig = str_temp.substr(indx, indx + 3);
         string str_result = str_dig + after_dig;
-        if (str_result.at(indx + 1) == '0')
+        if (after_dig.at(indx + 1) == '0')
             return str_result.substr(0, indx);
-        if (str_result.at(indx + 2) == '0')
+        if (after_dig.at(indx + 2) == '0')
             return str_result.substr(0, indx + 2);
+//        if(after_dig.at(indx+3)=='0')
+//            return str_result.substr(0,indx+3);
         return str_result;
     }
 
@@ -228,7 +152,7 @@ public:
         return false;
     }
 
-    vector<pair<int, int>> initRealReport() const {
+    vector<pair<int, int>> initRealReport(Client* client) const {
         vector<pair<int, int>> result = {};
         string line = dio->read();
         //splitting
@@ -240,6 +164,7 @@ public:
             end = stoi(line.substr(indx + 1, line.size() - 1));
             result.emplace_back(start, end);
             line = dio->read();
+            client->csv_lines-=(end-start);
         }
         dio->write("Upload complete.\n");
         return result;
@@ -293,10 +218,10 @@ public:
 
     virtual void execute() override {
         dio->write("Please upload your local train CSV file.\n");
-        string test_path = "D:\\Advanced_programming\\anomalyTest.csv";
-        string train_path = "D:\\Advanced_programming\\anomalyTrain.csv";
-        getClient().setTrainPath(train_path);
-        getClient().setTestPath(test_path);
+        string test_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTest.csv";
+        string train_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTrain.csv";
+        getClient().train_path=train_path;
+        getClient().test_path=test_path;
         getCSV(train_path, true);
         dio->write("Please upload your local test CSV file.\n");
         getCSV(test_path, false);
@@ -324,7 +249,7 @@ public:
         }
         myfile.close();
         if (update_csv_len) {
-            getClient().setCsvLines(counter);
+            getClient().csv_lines=counter-1;
         }
         dio->write("Upload complete.\n");
     }
@@ -337,11 +262,11 @@ public:
     virtual ~Exit() {}
 
     void execute() override {
-        string testPath = getClient().getTestPath();
-        string trainPath = getClient().getTrainPath();
+        string testPath = getClient().test_path;
+        string trainPath = getClient().train_path;
         remove(testPath.c_str());
         remove(trainPath.c_str());
-        getClient().setCorrelation(0);
+        getClient().correlation=0;
     }
 };
 
@@ -352,7 +277,7 @@ public:
     virtual ~DisplayResults() {}
 
     void execute() override {
-        vector<AnomalyReport> ar = getClient().getAnomalyReport();
+        vector<AnomalyReport> ar = getClient().anomaly_report;
         for (auto &element: ar) {
             getDefaultIO()->write(to_string(element.timeStep) + "\t" + element.description + "\n");
         }
@@ -367,16 +292,16 @@ public:
     virtual ~DetectAnomaly() {}
 
     void execute() override {
-        string train_path = getClient().getTrainPath();
+        string train_path = getClient().train_path;
         TimeSeries ts(train_path.c_str());
-        HybridAnomalyDetector ad(getClient().getCorrelation());
+        HybridAnomalyDetector ad(getClient().correlation);
         ad.learnNormal(ts);
 
-        string test_path = getClient().getTestPath();
+        string test_path = getClient().test_path;
         TimeSeries ts2(test_path.c_str());
         vector<AnomalyReport> report = ad.detect(ts2);
 
-        getClient().setAnomalyReport(report);
+        getClient().anomaly_report=report;
         getDefaultIO()->write("anomaly detection complete.\n");
     }
 };
@@ -390,7 +315,7 @@ public:
     void execute() override {
         float corr;
         while (true) {
-            float corrolation = getClient().getCorrelation();
+            float corrolation = getClient().correlation;
             getDefaultIO()->write("The current correlation threshold is " +
                                   to_string(corrolation).substr
                                           (0, to_string(corrolation).find(".") + 2) + "\n");
@@ -402,7 +327,7 @@ public:
             getDefaultIO()->write("please choose a value between 0 and 1.\n");
 
         }
-        getClient().setCorrelation(corr);
+        getClient().correlation=corr;
 
     }
 };

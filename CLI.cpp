@@ -18,7 +18,7 @@ void CLI::start() {
       * we will modify client object for each client.
       */
     auto *client = new Client();
-    client->setCorrelation(0.9);
+    client->correlation=0.9;
     //initialize only once and change it.
     initializeCommandMap(client);
     //accept
