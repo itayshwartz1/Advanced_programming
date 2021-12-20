@@ -57,6 +57,7 @@ struct Client {
     string test_path;
     float correlation;
     int csv_lines;
+    int N;
     vector<AnomalyReport> anomaly_report;
 };
 
@@ -111,38 +112,39 @@ public:
         vector<pair<int, int>> compressed_report = compressReport(getClient().anomaly_report);
         vector<pair<int, int>> real_report = initRealReport(&getClient());
         float FP = 0, TP = 0;
+        bool flag = false;
         for (auto &comp_res: compressed_report) {
-            for(auto&real_rep:real_report){
-                if(comp_res.first>=real_rep.first&&comp_res.first<real_rep.second){
+            for (auto &real_rep: real_report) {
+                if ((comp_res.first >= real_rep.first && comp_res.first <= real_rep.second) ||
+                    (real_rep.first >= comp_res.first && real_rep.first <= comp_res.second)) {
                     TP++;
-                    break;
+                    flag = true;
                 }
+
+            }
+            if (!flag) {
                 FP++;
             }
+            flag = false;
         }
         string TP_result = toStringCase(TP, (float) real_report.size());
-        string FP_result = toStringCase(FP, (float) getClient().csv_lines - 1);
+        string FP_result = toStringCase(FP, (float) getClient().N);
         dio->write("True Positive Rate: " + TP_result + "\n");
         dio->write("False Positive Rate: " + FP_result + "\n");
     }
+
 /**
  * NEED TO DEBUG AND CHECK IT!
  */
     string toStringCase(float result, float size) {
-        float temp = (result / size);
+        float temp = result / size;
         string str_temp = to_string(temp);
-        string str_dig;
-        int indx = (int) str_temp.find('.');
-        str_dig = str_temp.substr(0, indx);
-        string after_dig = str_temp.substr(indx, indx + 3);
-        string str_result = str_dig + after_dig;
-        if (after_dig.at(indx + 1) == '0')
-            return str_result.substr(0, indx);
-        if (after_dig.at(indx + 2) == '0')
-            return str_result.substr(0, indx + 2);
-//        if(after_dig.at(indx+3)=='0')
-//            return str_result.substr(0,indx+3);
-        return str_result;
+        str_temp = str_temp.substr(0, 5);
+        while ((str_temp.at(str_temp.size() - 1) == '0' && str_temp.size() > 1) ||
+               str_temp.at(str_temp.size() - 1) == '.') {
+            str_temp = str_temp.substr(0, str_temp.size() - 1);
+        }
+        return str_temp;
     }
 
     bool isContained(pair<int, int> a, pair<int, int> b) {
@@ -152,20 +154,22 @@ public:
         return false;
     }
 
-    vector<pair<int, int>> initRealReport(Client* client) const {
+    vector<pair<int, int>> initRealReport(Client *client) const {
         vector<pair<int, int>> result = {};
         string line = dio->read();
         //splitting
         int indx;
         int start, end;
+        int N = client->csv_lines;
         while (line != "done") {
             indx = line.find(',');
             start = stoi(line.substr(0, indx));
             end = stoi(line.substr(indx + 1, line.size() - 1));
             result.emplace_back(start, end);
             line = dio->read();
-            client->csv_lines-=(end-start);
+            N -= (end - start) + 1;
         }
+        client->N = N;
         dio->write("Upload complete.\n");
         return result;
     }
@@ -177,13 +181,15 @@ public:
             return ret;
         }
         const AnomalyReport *start = &ar[0];
-        for (int i = 1; i < ar.size(); i++) {
+        int i;
+        for (i = 1; i < ar.size(); i++) {
             if (ar[i - 1].description == ar[i].description && ar[i - 1].timeStep + 1 == ar[i].timeStep) {
                 continue;
             }
             ret.emplace_back(start->timeStep, ar[i - 1].timeStep);
             start = &ar[i];
         }
+        ret.emplace_back(start->timeStep, ar[i - 1].timeStep);
         return ret;
     }
 };
@@ -218,10 +224,10 @@ public:
 
     virtual void execute() override {
         dio->write("Please upload your local train CSV file.\n");
-        string test_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTest.csv";
-        string train_path = "C:\\Users\\yhood\\CLionProjects\\Advanced_programming\\anomalyTrain.csv";
-        getClient().train_path=train_path;
-        getClient().test_path=test_path;
+        string test_path = "anomalyTest.csv";
+        string train_path = "anomalyTrain.csv";
+        getClient().train_path = train_path;
+        getClient().test_path = test_path;
         getCSV(train_path, true);
         dio->write("Please upload your local test CSV file.\n");
         getCSV(test_path, false);
@@ -249,7 +255,7 @@ public:
         }
         myfile.close();
         if (update_csv_len) {
-            getClient().csv_lines=counter-1;
+            getClient().csv_lines = counter - 1;
         }
         dio->write("Upload complete.\n");
     }
@@ -266,7 +272,7 @@ public:
         string trainPath = getClient().train_path;
         remove(testPath.c_str());
         remove(trainPath.c_str());
-        getClient().correlation=0;
+        getClient().correlation = 0;
     }
 };
 
@@ -301,7 +307,7 @@ public:
         TimeSeries ts2(test_path.c_str());
         vector<AnomalyReport> report = ad.detect(ts2);
 
-        getClient().anomaly_report=report;
+        getClient().anomaly_report = report;
         getDefaultIO()->write("anomaly detection complete.\n");
     }
 };
@@ -327,7 +333,7 @@ public:
             getDefaultIO()->write("please choose a value between 0 and 1.\n");
 
         }
-        getClient().correlation=corr;
+        getClient().correlation = corr;
 
     }
 };
