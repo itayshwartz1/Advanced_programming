@@ -283,7 +283,7 @@ public:
     virtual ~DisplayResults() {}
 
     void execute() override {
-        vector<AnomalyReport> ar = getClient().anomaly_report;
+        const vector<AnomalyReport> &ar = getClient().anomaly_report;
         for (auto &element: ar) {
             getDefaultIO()->write(to_string(element.timeStep) + "\t" + element.description + "\n");
         }
@@ -305,9 +305,7 @@ public:
 
         string test_path = getClient().test_path;
         TimeSeries ts2(test_path.c_str());
-        vector<AnomalyReport> report = ad.detect(ts2);
-
-        getClient().anomaly_report = report;
+        getClient().anomaly_report=ad.detect(ts2);
         getDefaultIO()->write("anomaly detection complete.\n");
     }
 };
