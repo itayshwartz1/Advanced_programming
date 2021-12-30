@@ -37,15 +37,15 @@ public:
 
 class SocketIO : public DefaultIO {
     int client_id;
-    char buffer[1];
+    char c;
 public:
     SocketIO(int client_id):client_id(client_id){}
     virtual string read() override {
-        int n;
         string result;
-        while (buffer[0]!='\n'){
-            n = ::read(client_id, buffer, 100);
-            result+=buffer;
+        recv(client_id,&c,sizeof(char),0);
+        while (c!='\n'){
+            result+=c;
+            recv(client_id,&c,sizeof(char),0);
         }
         return result;
     }

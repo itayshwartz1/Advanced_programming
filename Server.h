@@ -17,6 +17,7 @@
 #include "thread"
 #include <pthread.h>
 #include "CLI.h"
+#include <signal.h>
 
 
 using namespace std;
@@ -49,8 +50,8 @@ class Server {
 	// you may add data members
     volatile bool stopped;
     int server_fd;
-    struct sockaddr_in address{};
-    struct sockaddr_in client{};
+    sockaddr_in server;
+    sockaddr_in client;
 
 public:
 	Server(int port) throw (const char*);

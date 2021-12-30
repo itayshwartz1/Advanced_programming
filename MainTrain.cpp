@@ -27,7 +27,7 @@ string readStr(int serverFD){
 	string serverInput="";
 	char c=0;
 	read(serverFD,&c,sizeof(char));
-	while(c!='\n'){				
+ 	while(c!='\n'){
 		serverInput+=c;
 		read(serverFD,&c,sizeof(char));
 	}
@@ -54,7 +54,7 @@ int initClient(int port)throw (const char*){
     if (serverFD < 0) 
         throw "socket problem";
     
-	server = gethostbyname("localhost");
+ 	server = gethostbyname("localhost");
 	if(server==NULL)
 		throw "no such host";
 	
