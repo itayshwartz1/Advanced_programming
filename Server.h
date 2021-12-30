@@ -8,6 +8,7 @@
 #ifndef SERVER_H_
 #define SERVER_H_
 #include <iostream>
+#include <unistd.h>
 #include <fstream>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -15,7 +16,7 @@
 #include <netdb.h>
 #include <pthread.h>
 #include <thread>
-
+#include "commands.h"
 #include "CLI.h"
 
 using namespace std;
@@ -33,9 +34,15 @@ class ClientHandler{
 // edit your AnomalyDetectionHandler class here
 class AnomalyDetectionHandler:public ClientHandler{
 	public:
-    CLI cli;
-
     virtual void handle(int clientID){
+        SocketIO s_io(clientID);
+        //need to use here all the socketIO methods.
+        // operate here CLI methodologic.
+        CLI cli(sio);
+
+
+
+
 
     }
 };
@@ -46,9 +53,11 @@ class Server {
 	thread* t; // the thread to run the start() method in
 
 	// you may add data members
+    int server_fd;
+    struct sockaddr_in address;
+    struct sockaddr_in client;
 
 public:
-    void
 	Server(int port) throw (const char*);
 	virtual ~Server();
 	void start(ClientHandler& ch)throw(const char*);

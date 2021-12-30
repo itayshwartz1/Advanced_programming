@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_executable(dev anomaly_detection_util.cpp anomaly_detection_util.h  AnomalyDetector.h SimpleAnomalyDetector.h
         timeseries.cpp timeseries.h SimpleAnomalyDetector.cpp  MainTrain.cpp minCircle.cpp minCircle.h
-        HybridAnomalyDetector.h HybridAnomalyDetector.cpp commands.h CLI.cpp CLI.h)
+        HybridAnomalyDetector.h HybridAnomalyDetector.cpp commands.h CLI.cpp CLI.h Server.cpp Server.h)
 
 

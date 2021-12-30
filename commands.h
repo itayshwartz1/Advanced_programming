@@ -5,7 +5,7 @@
 
 #include<iostream>
 #include <string.h>
-
+#include "Server.h"
 #include <fstream>
 #include <utility>
 #include <vector>
@@ -29,10 +29,22 @@ public:
     // you may add additional methods here
 
 };
-class SocketIO: public DefaultIO{
 
+class SocketIO : public DefaultIO {
+    int client_id;
+    char buffer[1];
+    SocketIO(int client_id) : client_id(client_id) {}
     virtual string read() override {
-
+        int n;
+        string result;
+        while (buffer[0]!='\n'){
+            n = ::read(client_id, buffer, 100);
+            result+=buffer;
+        }
+        return result;
+    }
+    virtual void write(string text) override{
+        send(client_id,text.c_str(),text.size(),0);
     }
 };
 
@@ -311,7 +323,7 @@ public:
 
         string test_path = getClient().test_path;
         TimeSeries ts2(test_path.c_str());
-        getClient().anomaly_report=ad.detect(ts2);
+        getClient().anomaly_report = ad.detect(ts2);
         getDefaultIO()->write("anomaly detection complete.\n");
     }
 };
