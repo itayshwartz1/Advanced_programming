@@ -40,10 +40,6 @@ class AnomalyDetectionHandler:public ClientHandler{
         // operate here CLI methodologic.
         CLI cli(sio);
 
-
-
-
-
     }
 };
 
