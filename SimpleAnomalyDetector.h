@@ -12,7 +12,6 @@
 #include <algorithm>
 #include "minCircle.h"
 #include <cmath>
-
 using std::vector;
 using std::string;
 

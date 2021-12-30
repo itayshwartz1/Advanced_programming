@@ -14,9 +14,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include "thread"
 #include <pthread.h>
-#include <thread>
-
+#include "CLI.h"
 
 
 using namespace std;
@@ -33,23 +33,21 @@ class ClientHandler{
 
 // edit your AnomalyDetectionHandler class here
 class AnomalyDetectionHandler:public ClientHandler{
-	public:
+public:
     virtual void handle(int clientID){
-        SocketIO
-        //need to use here all the socketIO methods.
-        // operate here CLI methodologic.
-        CLI cli(sio);
-
-
+        DefaultIO* dio=new SocketIO(clientID);
+        CLI cli(dio);
+        cli.start();
     }
 };
 
 
 // implement on Server.cpp
 class Server {
-	thread* t{}; // the thread to run the start() method in
+	thread* t; // the thread to run the start() method in
 
 	// you may add data members
+    volatile bool stopped;
     int server_fd;
     struct sockaddr_in address{};
     struct sockaddr_in client{};

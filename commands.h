@@ -5,12 +5,17 @@
 
 #include<iostream>
 #include <string.h>
-#include "Server.h"
 #include <fstream>
 #include <utility>
 #include <vector>
 #include "HybridAnomalyDetector.h"
-
+#include <iostream>
+#include <unistd.h>
+#include <fstream>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
 using namespace std;
 
@@ -33,7 +38,8 @@ public:
 class SocketIO : public DefaultIO {
     int client_id;
     char buffer[1];
-    SocketIO(int client_id) : client_id(client_id) {}
+public:
+    SocketIO(int client_id):client_id(client_id){}
     virtual string read() override {
         int n;
         string result;
@@ -45,6 +51,10 @@ class SocketIO : public DefaultIO {
     }
     virtual void write(string text) override{
         send(client_id,text.c_str(),text.size(),0);
+    }
+    virtual void write(float f) override{
+           }
+    virtual void read(float *f) override{
     }
 };
 
