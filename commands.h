@@ -29,6 +29,12 @@ public:
     // you may add additional methods here
 
 };
+class SocketIO: public DefaultIO{
+
+    virtual string read() override {
+
+    }
+};
 
 // you may add here helper classes
 class StandardIo : public DefaultIO {
